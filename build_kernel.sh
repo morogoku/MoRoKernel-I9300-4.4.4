@@ -18,12 +18,12 @@ if [ "${1}" != "" ];then
   export KERNELDIR=`readlink -f ${1}`
 fi
 
-TOOLCHAIN="/home/lonas/Kernel_Lonas/toolchains/arm-eabi-4.4.3/bin/arm-eabi-"
-TOOLCHAIN_PATCH="/home/lonas/Kernel_Lonas/toolchains/arm-eabi-4.4.3/bin"
-ROOTFS_PATH="/home/lonas/Kernel_Lonas/Enki-GT-I9300/ramdisk"
-RAMFS_TMP="/home/lonas/Kernel_Lonas/tmp/ramfs-source-sgs3"
+TOOLCHAIN="/home/moro/kernel/toolchains/arm-eabi-4.4.3/bin/arm-eabi-"
+TOOLCHAIN_PATCH="/home/moro/kernel/toolchains/arm-eabi-4.4.3/bin"
+ROOTFS_PATH="/home/moro/kernel/MoRoKernel-I9300-4.4.4/ramdisk"
+RAMFS_TMP="/home/moro/kernel/tmp/ramfs-source-sgs3"
 
-export KERNEL_VERSION="Enki-0.8"
+export KERNEL_VERSION="MoRoKernel-1.0"
 export VERSION_KL="GT-I9300"
 export REVISION="RC"
 
@@ -133,6 +133,6 @@ rm $KERNELDIR/zImage > /dev/null 2>&1
 rm $KERNELDIR/zImage-dtb > /dev/null 2>&1
 rm $KERNELDIR/boot.dt.img > /dev/null 2>&1
 rm $KERNELDIR/dt.img > /dev/null 2>&1
-rm -rf /home/lonas/Kernel_Lonas/tmp/ramfs-source-sgs3 > /dev/null 2>&1
-rm /home/lonas/Kernel_Lonas/tmp/ramfs-source-sgs3.cpio.gz > /dev/null 2>&1
+rm -rf /home/moro/kernel/tmp/ramfs-source-sgs3 > /dev/null 2>&1
+rm /home/moro/kernel/tmp/ramfs-source-sgs3.cpio.gz > /dev/null 2>&1
 echo "#################### Terminado ####################"

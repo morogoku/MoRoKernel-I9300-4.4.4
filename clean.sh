@@ -1,7 +1,7 @@
 #!/bin/bash
 
-TOOLCHAIN="/home/lonas/Kernel_Lonas/toolchains/arm-eabi-4.4.3/bin/arm-eabi-"
-DIR="/home/lonas/Kernel_Lonas/Enki-GT-I9300"
+TOOLCHAIN="/home/moro/kernel/toolchains/arm-eabi-4.4.3/bin/arm-eabi-"
+DIR="/home/moro/kernel/MoRoKernel-I9300-4.4.4"
 
 echo "#################### Eliminando Restos ####################"
 if [ -e boot.img ]; then
