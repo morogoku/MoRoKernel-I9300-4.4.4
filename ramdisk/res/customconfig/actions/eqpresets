@@ -1,0 +1,116 @@
+#!/sbin/busybox sh
+
+if [[ ! -z $2 ]]; then
+	filename=$(basename $2)
+fi
+
+if [[ ! -z $3 ]]; then
+	evalcmd='eval "$filename=$3"'
+	eval $evalcmd
+fi
+
+eqpresets_predef="0"
+eqpresets_find=`grep "eqpresets_predef" $DEFAULT_PROFILE | cut -d'=' -f2`
+
+write_value() {  
+  echo "$1=$2" >> $DEFAULT_PROFILE
+}
+
+edit_value() {
+  g_find=`grep $1=.* $DEFAULT_PROFILE`
+    
+  if [[ -z $g_find ]]; then
+    write_value $1 $2
+  else
+    sed -i "s/$1=[^ ]*/$1=$2/" $DEFAULT_PROFILE 
+  fi
+}
+
+write_values(){
+  edit_value headphone_eq_b1_gain $headphone_eq_b1_gain
+  edit_value headphone_eq_b1_gain $headphone_eq_b1_gain
+  edit_value headphone_eq_b2_gain $headphone_eq_b2_gain
+  edit_value headphone_eq_b3_gain $headphone_eq_b3_gain
+  edit_value headphone_eq_b4_gain $headphone_eq_b4_gain
+  edit_value headphone_eq_b5_gain $headphone_eq_b5_gain
+  edit_value eqpresets_predef $eqpresets_predef 
+
+  echo $headphone_eq_b1_gain >/sys/class/misc/voodoo_sound/headphone_eq_b1_gain
+  echo $headphone_eq_b2_gain >/sys/class/misc/voodoo_sound/headphone_eq_b2_gain
+  echo $headphone_eq_b3_gain >/sys/class/misc/voodoo_sound/headphone_eq_b3_gain
+  echo $headphone_eq_b4_gain >/sys/class/misc/voodoo_sound/headphone_eq_b4_gain
+  echo $headphone_eq_b5_gain >/sys/class/misc/voodoo_sound/headphone_eq_b5_gain
+}
+
+case "$eqpresetspredef" in
+  0)# Flat (Disabled)
+    headphone_eq_b1_gain="0"
+    headphone_eq_b2_gain="0"
+    headphone_eq_b3_gain="0"
+    headphone_eq_b4_gain="0"
+    headphone_eq_b5_gain="0"
+    eqpresets_predef="0"
+    write_values
+    ;;
+  1)# Bass-extreme
+    headphone_eq_b1_gain="12"
+    headphone_eq_b2_gain="8"
+    headphone_eq_b3_gain="3"
+    headphone_eq_b4_gain="-1"
+    headphone_eq_b5_gain="1"
+    eqpresets_predef="1"
+    write_values
+    ;;
+  2)# Bass and Treble
+    headphone_eq_b1_gain="10"
+    headphone_eq_b2_gain="7"
+    headphone_eq_b3_gain="0"
+    headphone_eq_b4_gain="2"
+    headphone_eq_b5_gain="5"
+    eqpresets_predef="2"
+    write_values
+    ;;
+  3)# Treble
+    headphone_eq_b1_gain="-5"
+    headphone_eq_b2_gain="1"
+    headphone_eq_b3_gain="0"
+    headphone_eq_b4_gain="4"
+    headphone_eq_b5_gain="3"
+    eqpresets_predef="3"
+    write_values
+    ;;
+  4)# Classic
+    headphone_eq_b1_gain="0"
+    headphone_eq_b2_gain="0"
+    headphone_eq_b3_gain="0"
+    headphone_eq_b4_gain="-3"
+    headphone_eq_b5_gain="-5"
+    eqpresets_predef="4"
+    write_values
+    ;;
+  5)# Pleasant for ears
+    headphone_eq_b1_gain="8"
+    headphone_eq_b2_gain="3"
+    headphone_eq_b3_gain="-2"
+    headphone_eq_b4_gain="3"
+    headphone_eq_b5_gain="8"
+    eqpresets_predef="5"
+    write_values
+    ;;
+  6)# Pleasant for ears
+    headphone_eq_b1_gain="12"
+    headphone_eq_b2_gain="8"
+    headphone_eq_b3_gain="4"
+    headphone_eq_b4_gain="2"
+    headphone_eq_b5_gain="3"
+    eqpresets_predef="6"
+    write_values
+    ;;
+  *)
+    if [[ ! -z $eqpresets_find ]]; then
+      eqpresets_predef="$eqpresets_find"
+    fi 
+    ;;
+esac;
+
+eval echo $eqpresets_predef

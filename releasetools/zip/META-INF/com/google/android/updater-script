@@ -1,62 +1,51 @@
+ui_print("*******************************");
+ui_print("*      MoRoKernel v1.0        *");
+ui_print("*                             *");
+ui_print("*     I9300 port 4.4.4        *");
+ui_print("*******************************");
 ui_print(" ");
 ui_print(" ");
-ui_print("   ##########################################   ");
-ui_print("   #          KERNEL MADE IN SPAIN          #   ");
-ui_print("   #   http://www.esp-desarrolladores.com   #   ");
-ui_print("   #             MoRoKernel 1.0             #   ");
-ui_print("   ##########################################   ");
 ui_print(" ");
-ui_print(" ");
-mount("ext4", "EMMC", "/dev/block/mmcblk0p8", "/cache");
-mount("ext4", "EMMC", "/dev/block/mmcblk0p12", "/data");
+
+ui_print("Montando particion de sistema");
 mount("ext4", "EMMC", "/dev/block/mmcblk0p9", "/system");
-mount("ext4", "EMMC", "/dev/block/mmcblk1p1", "/sdcard");
-ui_print(" ");
-ui_print(" ");
-ui_print(" - Eliminando modulos antiguos");
-ui_print(" ");
-ui_print(" ");
-run_program("/sbin/busybox", "rm", "-r", "/system/lib/modules");
-show_progress(0.100000, 0);
-ui_print(" - Eliminando restos anteriores");
-ui_print(" ");
-ui_print(" ");
-show_progress(0.100000, 20);
-ui_print(" ");
-ui_print(" ");
-show_progress(0.100000, 40);
-delete_recursive("/data/.tpowercc");
-run_program("/sbin/busybox", "rm", "-r", "/data/.tpowercc");
-show_progress(0.100000, 50);
-ui_print(" - Wiping dalvik-cache");
-ui_print(" ");
-ui_print(" ");
-run_program("/sbin/busybox", "rm", "-r", "/data/dalvik-cache");
+mount("ext4", "EMMC", "/dev/block/mmcblk0p12", "/data");
+ui_print("");
+ui_print("");
+
+ui_print("Borrando dalvi & cache");
 delete_recursive("/data/dalvik-cache");
-run_program("/sbin/busybox", "rm", "-r", "/cache/dalvik-cache");
-delete_recursive("/cache");
-run_program("/sbin/busybox", "rm", "-r", "/cache");
-ui_print(" ");
-ui_print(" ");
-show_progress(0.100000, 60);
-unmount("/cache");
-unmount("/data");
-unmount("/system");
-unmount("/sdcard");
-ui_print(" ");
-ui_print(" - Flasheando kernel ");
-ui_print(" ");
-ui_print(" ");
-ui_print(" - Version: [MoRoKernel 1.0] ");
-ui_print(" ");
-ui_print(" ");
+delete_recursive("/data/cache");
+delete_recursive("/data/.moro");
+delete_recursive("/data/data/com.otaupdater");
+ui_print("");
+ui_print("");
+
+ui_print("Limpiando restos de kernels anteriores");
+package_extract_file("scripts/limpieza_kernel.sh", "/tmp/limpieza_kernel.sh");
+set_perm(0, 0, 0777, "/tmp/limpieza_kernel.sh");
+run_program("/tmp/limpieza_kernel.sh");
+ui_print("");
+ui_print("");
+
+ui_print("Instalando MTWeaks");
+package_extract_dir("data", "/data");
+set_perm(0, 0, 0644, "/data/app/MTweaks.apk");
+ui_print("");
+ui_print("");
+
+ui_print("Flasheando kernel...");
 assert(package_extract_file("boot.img", "/tmp/boot.img"),
-show_progress(0.100000, 70);
-write_raw_image("/tmp/boot.img", "/dev/block/mmcblk0p5"),
-show_progress(0.100000, 90);
-delete("/tmp/boot.img"));
-show_progress(0.100000, 100);
-ui_print(" ");
-ui_print(" - Terminando...");
-ui_print(" ");
-ui_print(" ");
+       write_raw_image("/tmp/boot.img", "/dev/block/mmcblk0p5"),
+       delete("/tmp/boot.img"));
+ui_print("");
+ui_print("");
+
+ui_print("Desmontando particion de sistema");
+unmount("/system");
+unmount("/data");
+ui_print("");
+ui_print("");
+ui_print("");
+ui_print("Instalación completa");
+ui_print("");

@@ -10,6 +10,7 @@ import /init.${ro.hardware}.rc
 import /init.trace.rc
 import /init.container.rc
 import /init.root.rc
+import /init.st.rc
 
 on early-init
     # Set init and its forked children's oom_adj.
@@ -136,6 +137,10 @@ on init
 # Allow everybody to read the xt_qtaguid resource tracking misc dev.
 # This is needed by any process that uses socket tagging.
     chmod 0644 /dev/xt_qtaguid
+
+# ko files for exfat -> AP: modules instead compiled into kernel
+    insmod /lib/modules/exfat_core.ko
+    insmod /lib/modules/exfat_fs.ko
 
 on fs
 # mount mtd partitions
@@ -907,7 +912,7 @@ service createsystemfile /system/bin/createsystemfile
     disabled
     oneshot
 
-service lonas-init /sbin/lonas-init.sh
+service moro-init /sbin/moro-init.sh
     class core
     user root
     group root
