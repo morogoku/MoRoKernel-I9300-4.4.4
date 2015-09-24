@@ -197,6 +197,149 @@ echo '
     </settingsPane>
   </settingsTab>
 
+  <settingsTab name="Memoria">
+    <settingsPane description="Interfaz desde donde podrá controlar y gestionar la memoria que consume tu terminal mediante uno de los diferentes perfiles, se aconseja Normal, Moderado y Super Moderado para un rendimiento óptimo."  
+                  name="Información">
+    </settingsPane>
+    <settingsPane description="Aplicar la configuración de arranque sólo si la que desea llega a ser estable, de lo contrario el equipo puede terminar en un Bucle de reinicios o directamente no arrancar." 
+                  name="LMK control switch">
+      <checkbox description="Si está activado, los ajustes siguientes se aplicarán en el arranque." 
+                name="Establecer LMK en el arranque" 
+                action="controlswitch LMK" 
+                label="Establecer en el arranque"/>
+    </settingsPane>
+
+    <settingsPane description="Selecciona el Perfil de memoria que deseas usar" name="LMK LowMemoryKiller">
+      <spinner description="Por Defecto: Super Moderado" name="Perfil LowMemoryKiller" action="minfree minfreepredef">
+             <spinnerItem name="LMK: Normal (Stock)" value="0"/>
+             <spinnerItem name="LMK: Moderado" value="1"/>
+             <spinnerItem name="LMK: Super Moderado" value="2"/>
+             <spinnerItem name="LMK: Light" value="3"/>
+             <spinnerItem name="LMK: Super Light" value="4"/>
+             <spinnerItem name="LMK: Medio" value="5"/>
+             <spinnerItem name="LMK: Agresivo" value="6"/>
+             <spinnerItem name="LMK: Super Agresivo" value="7"/>
+      </spinner>
+    </settingsPane>
+  </settingsTab>
+
+  <settingsTab name="SONIDO">
+    
+    <settingsPane name="Activacion de Remsound" 
+                  description="">
+      <checkbox name="Remsound" 
+                description="Activa o desactiva el sistema de sonido Remsound" 
+                action="generic01 /sys/class/misc/rem_sound/rem_sound"
+                label="Activar Remsound"/>
+    </settingsPane>
+
+    <settingsPane name="Volumen"
+                  description="">
+      <seekBar name="Volumen Auriculares" 
+               description="Aumentar volumen de los auriculares" 
+               action="volume-h headphone_volume"
+               unit="" min="20" reversed="false" step="1" max="63"/>
+      <seekBar name="Volumen Altavoz" 
+               description="Aumentar volumen del altavoz" 
+               action="volume-s speaker_volume"
+               unit="" min="57" reversed="false" step="1" max="63"/>
+    </settingsPane>
+
+    <settingsPane name="Control de Micrófono"
+                  description="Los niveles siguientes controlan la sensibilidad del micrófono.">
+      <seekBar description="" 
+	       name="Nivel general"
+               action="generic /sys/class/misc/rem_sound/mic_level_general" 
+               unit="" min="0" reversed="false" step="1" max="31"/>
+      <seekBar description="" 
+	       name="Nivel en llamada"
+               action="generic /sys/class/misc/rem_sound/mic_level_call"
+               unit="" min="0" reversed="false" step="1" max="31"/>
+    </settingsPane>
+
+    <settingsPane name="GENERAL"
+                  description="">
+      <checkbox name="DAC Directo" 
+                description="Pasar por alto el canal analógico" 
+                action="generic01 /sys/class/misc/rem_sound/dac_direct"
+                label="Activar DAC Directo"/>
+      <checkbox name="DAC Sobremuestreo" 
+                description="128x Sobre muestreo" 
+                action="generic01 /sys/class/misc/rem_sound/dac_oversampling"
+                label="Activar DAC Sobremuestreo"/>
+      <checkbox name="FLL Tuning" 
+                description="Ajuste para una mejor calidad" 
+                action="generic01 /sys/class/misc/rem_sound/fll_tuning"
+                label="Activar FLL Tuning"/>
+      <checkbox name="Speaker Tuning" 
+                description="Mejora la calidad del sonido cuando se reproduce  por el altavoz" 
+                action="generic01 /sys/class/misc/rem_sound/speaker_tuning"
+                label="Activar Speaker Tuning"/>
+      <checkbox name="Modo de privacidad" 
+                description="Silenciar el altavoz del terminal al conectar loa auriculares" 
+                action="generic01 /sys/class/misc/rem_sound/privacy_mode"
+                label="Activar Modo Privacidad"/>
+      <checkbox name="Forzar a Mono" 
+                description="Fuerza a Mono la salida de audio" 
+                action="generic01 /sys/class/misc/rem_sound/mono_downmix"
+                label="Activar Salida Mono"/>
+      <seekBar name="Expansión Estéreo"
+               description="Aumenta la profundidad y claridad de la música"
+	       action="generic /sys/class/misc/rem_sound/stereo_expansion" 
+	       unit="" min="0" reversed="false" step="1" max="31"/>
+    </settingsPane>
+
+    <settingsPane description="Desde aqui podrá activar y cambiar los ajustes del ecualizador gráfico" name="Ecualizador">
+      <spinner description="Active el equalizador gráfico" name="HW Equalizador" action="generic /sys/class/misc/rem_sound/eq">
+             <spinnerItem name="Desactivado" value="0"/> 
+             <spinnerItem name="Activado CON protección de saturación" value="1"/> 
+             <spinnerItem name="Activado SIN protección de saturación" value="2"/> 
+      </spinner>
+      <spinner description="Preselecciones del ecualizador" 
+               name="EQ Presets" 
+	       action="eq-profile eq_profile">
+		<spinnerItem name="Normal (Custom)" value="0"/> 
+		<spinnerItem name="Extreme Bass" value="1"/> 
+		<spinnerItem name="Bass-Treble Balance" value="2"/> 
+		<spinnerItem name="Treble Gain" value="3"/> 
+		<spinnerItem name="Classical" value="4"/> 
+		<spinnerItem name="Pleasant" value="5"/> 
+		<spinnerItem name="Eargasm" value="6"/> 
+		<spinnerItem name="LonasBeats" value="7"/>
+		<spinnerItem name="BeatsBass" value="8"/>
+		<spinnerItem name="Enhanced-Sound" value="9"/>
+		<spinnerItem name="DeepBass" value="10"/>
+		<spinnerItem name="Detonation" value="11"/>
+		<spinnerItem name="LonasPower" value="12"/>
+		<spinnerItem name="BestCream" value="13"/>
+      </spinner>
+    </settingsPane>
+
+    <settingsPane description="Ajuste por separadao los valores del ecualizador." name="Ecualizador Gráfico">
+      <seekBar description="" 
+	       name="Band1 gain" 
+	       action="eq-custom eq1" 
+	       unit=" dB" min="-12" reversed="false" step="1" max="12"/>
+      <seekBar description="" 
+	       name="Band2 gain" 
+	       action="eq-custom eq2" 
+	       unit=" dB" min="-12" reversed="false" step="1" max="12"/>
+      <seekBar description="" 
+	       name="Band3 gain" 
+	       action="eq-custom eq3" 
+	       unit=" dB" min="-12" reversed="false" step="1" max="12"/>
+      <seekBar description="" 
+	       name="Band4 gain" 
+	       action="eq-custom eq4" 
+	       unit=" dB" min="-12" reversed="false" step="1" max="12"/>
+      <seekBar description="" 
+	       name="Band5 gain" 
+	       action="eq-custom eq5" 
+	       unit=" dB" min="-12" reversed="false" step="1" max="12"/>
+    </settingsPane>
+
+  </settingsTab>
+
   <settingsTab name="CARGADOR">
     <settingsPane description="Interfaz desde donde podrá seleccionar entre varios perfiles de carga AC/USB/Inalámbrica, dependiendo del que seleccione la batería cargará mas lento o mas rápido."  
                   name="Información">
