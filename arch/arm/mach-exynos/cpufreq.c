@@ -873,7 +873,7 @@ ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf) {
     for (i = exynos_info->max_support_idx; i<=exynos_info->min_support_idx; i++)
     {
       if(exynos_info->freq_table[i].frequency==CPUFREQ_ENTRY_INVALID) continue;
-      len += sprintf(buf + len, "%dmhz: %d mV\n", exynos_info->freq_table[i].frequency/1000,
+      len += sprintf(buf + len, "%d %d \n", exynos_info->freq_table[i].frequency/1000,
 					((exynos_info->volt_table[i] % 1000) + exynos_info->volt_table[i])/1000);
     }
   }
