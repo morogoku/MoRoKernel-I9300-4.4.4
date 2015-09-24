@@ -27,7 +27,6 @@ rm -rf /data/.boeffla
 rm -rf /data/.tpowercc
 rm -rf /data/.arter97
 rm -rf /data/.siyah
-rm -rf /data/.moro
 rm -rf /data/media/.arter97
 rm -rf /data/media/0/.arter97
 
