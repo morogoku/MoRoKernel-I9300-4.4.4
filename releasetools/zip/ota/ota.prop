@@ -1,0 +1,6 @@
+{
+    "noflash": "false",
+    "rebootcmd": "<< reboot command if different than `reboot recovery` (can be a script included with ROM/Kernel) >>",
+    "system_sdpath": "/storage/extSdCard",
+    "recovery_sdpath": "/storage/sdcard1"
+}
