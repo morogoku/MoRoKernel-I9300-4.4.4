@@ -110,13 +110,13 @@ config CPU_FREQ_DEFAULT_GOV_IMPULSE
 	  % frequency steps to get smooth up/downscaling dependant on CPU load.
 
 config CPU_FREQ_DEFAULT_GOV_ZZMOOVE
-	  bool "zzmoove"
-	  select CPU_FREQ_GOV_ZZMOOVE
-	  select CPU_FREQ_GOV_PERFORMANCE
-	  help
-	  Use the CPUFreq governor 'zzmoove' as default, using predefined
-	  frequency lookup tables and optimized scaling triggers instead of
-	  % frequency steps to get smooth up/downscaling dependant on CPU load.
+	bool "zzmoove"
+	select CPU_FREQ_GOV_ZZMOOVE
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	Use the CPUFreq governor 'zzmoove' as default, using predefined
+	frequency lookup tables and optimized scaling triggers instead of
+	% frequency steps to get smooth up/downscaling dependant on CPU load.
 
 config CPU_FREQ_DEFAULT_GOV_INTERACTIVE
 	bool "interactive"
@@ -140,6 +140,13 @@ config CPU_FREQ_DEFAULT_GOV_ADAPTIVE
 config CPU_FREQ_DEFAULT_GOV_PEGASUSQ
 	bool "pegasusq"
 	select CPU_FREQ_GOV_PEGASUSQ
+
+config CPU_FREQ_DEFAULT_GOV_WHEATLEY
+	bool "wheatley"
+	select CPU_FREQ_GOV_WHEATLEY
+	select CPU_FREQ_GOV_PERFORMANCE
+	help
+	  Use the CPUFreq governor 'wheatley' as default.
 
 endchoice
 
@@ -274,11 +281,11 @@ config CPU_FREQ_GOV_ZZMOOVE
 	tristate "'zzmoove' cpufreq governor"
 	depends on CPU_FREQ
 	help
-	  'zzmoove' - based on cpufreq_conservative, using predefined
-	  frequency lookup tables and optimized scaling triggers instead of
-	  % frequency steps to get smooth up/downscaling dependant on CPU load.
+	'zzmoove' - based on cpufreq_conservative, using predefined
+	frequency lookup tables and optimized scaling triggers instead of
+	% frequency steps to get smooth up/downscaling dependant on CPU load.
 
-	  If in doubt, say N.
+	If in doubt, say N.
 
 config CPU_FREQ_GOV_ADAPTIVE
 	tristate "'adaptive' cpufreq policy governor"
@@ -327,6 +334,10 @@ config CPU_FREQ_DVFS_MONITOR
 	help
 	  This option adds a proc node for dvfs monitoring.
 	  /proc/dvfs_mon
+
+config CPU_FREQ_GOV_WHEATLEY
+	tristate "'wheatley' cpufreq governor"
+	depends on CPU_FREQ	
 
 
 menu "x86 CPU frequency scaling drivers"
