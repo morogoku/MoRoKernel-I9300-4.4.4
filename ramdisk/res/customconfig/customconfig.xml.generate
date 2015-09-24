@@ -39,8 +39,8 @@ echo '
 
     </settingsPane>
 
-    <settingsPane description="CPU scaling" 
-                  name="CPU voltaje control">' >> $XML
+    <settingsPane description="Selecciona las frecuencias máximas y mínimas para la CPU. Por defecto está a 1400Mhz Max - 200Mhz Min. La máxima se puede overclockear hasta 1600Mhz con lo que irá mas rápido pero gastará un poco mas. Si se quiere ahorrar un poco de bateria se puede bajar hasta 1300 o 1200Mhz" 
+                  name="CPU Scaling">' >> $XML
 
 echo "
       <spinner description=\"Establece la frecuencia máxima de la CPU. Por defecto: `cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq | rev | cut -c 4- | rev` MHz.\" 
@@ -67,10 +67,11 @@ done < /sys/devices/system/cpu/cpu0/cpufreq/UV_mV_table
 
 echo '
       </spinner>
-    </settingsPane>
+    </settingsPane>' >> $XML
 
-    <settingsPane description="La disminución de tensión reducirá el consumo de energía de la CPU. El aumento en las frecuencias de overclocking mejora la estabilidad. Demasiado bajo voltaje puede causar inestabilidad y puede quedarse congelado (Colgado)." 
-                  name="CPU voltage control">' >> $XML
+echo "
+    <settingsPane description=\"La disminución de tensión reducirá el consumo de energía de la CPU. El aumento en las frecuencias de overclocking mejora la estabilidad. Demasiado bajo voltaje puede causar inestabilidad y puede quedarse congelado (Colgado).\" 
+                name=\"CPU voltage control\">" >> $XML
 
 while read FREQ UVOLT; do
   echo "
@@ -123,6 +124,18 @@ echo '
                action="generictagforce sd /sys/block/mmcblk1/queue/read_ahead_kb"
                unit="kB" min="128" reversed="false" step="128" max="2048"/>
     </settingsPane>
+
+    <settingsPane description="TCP Control" name="TCP Control">
+
+	<spinner description="opciones para cambiar la unidad de congestión TCP" name="TCP Congestion Control" action="generic /proc/sys/net/ipv4/tcp_congestion_control">
+			<spinnerItem name="westwood" value="westwood"/>
+			<spinnerItem name="cubic" value="cubic"/>
+			<spinnerItem name="reno" value="reno"/>
+			<spinnerItem name="bic" value="bic"/>
+			<spinnerItem name="htcp" value="htcp"/>
+	</spinner>
+
+	</settingsPane>
     
     <settingsPane name="Dynamic FSync" 
                   description="fsync() Sirve como un flush/commit en el búfer de escritura al hacer I/O, escribe al almacenamiento. Se almacena una memoria intermedia con datos y escribe periódicamente en el dispositivo de almacenamiento. Desactivando esto ya no hará esto y directamente escribirá los datos.">
@@ -185,30 +198,33 @@ echo '
   </settingsTab>
 
   <settingsTab name="CARGADOR">
-    <settingsPane description="Interfaz desde donde podrá seleccionar entre varios perfiles de carga AC/USB, dependiendo del que seleccione la batería cargará mas lento o mas rápido."  
+    <settingsPane description="Interfaz desde donde podrá seleccionar entre varios perfiles de carga AC/USB/Inalámbrica, dependiendo del que seleccione la batería cargará mas lento o mas rápido."  
                   name="Información">
     </settingsPane>
-   <settingsPane description="Selecciona el Perfil de carga que deseas, por defecto está a 1000mA, un perfil mas alto cargará mas rápido la batería, no es recomendable pasar de 1200mA" name="Carga AC">
-      <spinner description="Por Defecto: AC:1000mA" 
-               name="Perfil de Carga AC" 
-	       action="chargeaccurrent chargeaccurrentpredef">
-		<spinnerItem name="AC:1000mA" value="0"/> 
-		<spinnerItem name="AC:1100mA" value="1"/> 
-		<spinnerItem name="AC:1200mA" value="2"/> 
-		<spinnerItem name="AC:1300mA" value="3"/> 
-      </spinner>
+   <settingsPane description="Selecciona el nivel para los 3 tipos de carga diponibles"
+                 name="Nivel de carga">
+
+      <seekBar description="Por Defecto: AC:1000mA" 
+               name="Carga AC" 
+               action="generic /sys/kernel/charge_levels/charge_level_ac"
+               unit=" mA" min="100" reversed="false" step="25" max="1300"/>
+    
+      <seekBar description="Por Defecto: USB:475mA" 
+               name="Carga USB" 
+               action="generic /sys/kernel/charge_levels/charge_level_usb"
+               unit=" mA" min="0" reversed="false" step="25" max="1000"/>
+
+      <seekBar description="Por Defecto: Inalámbrica:475mA" 
+               name="Carga Inalámbrica" 
+               action="generic /sys/kernel/charge_levels/charge_level_wireless"
+               unit=" mA" min="0" reversed="false" step="25" max="1000"/>
+    
     </settingsPane>
-    <settingsPane description="Selecciona el Perfil de carga que deseas, por defecto está a 475mA, un perfil mas alto cargará mas rápido la batería, no es recomendable pasar de 900mA" 
-                  name="Carga USB">
-      <spinner description="Por Defecto: USB:475mA" 
-               name="Perfil de Carga USB" 
-	       action="chargeusbcurrent chargeusbcurrentpredef">
-		<spinnerItem name="USB:475mA" value="0"/> 
-		<spinnerItem name="USB:700mA" value="1"/> 
-		<spinnerItem name="USB:900mA" value="2"/> 
-		<spinnerItem name="USB:1000mA" value="3"/>
-      </spinner>
-	<checkbox description="Para aquellos con problemas de carga inestable, si no te carga a mas de 475mA puedes probar activando esta opción." 
+
+    <settingsPane description="Ajustes para cuando tenemos carga inestable debida a cables o cargadores en mal estado y notamos que nos tarda mucho en cargar aun habiendo aumentado el nivel de carga AC/USB"
+                 name="carga inestable">
+
+      <checkbox description="Para aquellos con problemas de carga inestable, si no te carga a mas de 475mA puedes probar activando esta opción." 
                 name="Ignorar carga inestable" 
                 action="generic01 /sys/kernel/charge_levels/ignore_unstable_power"
                 label="Activar Ignorar carga inestable"/>
@@ -241,7 +257,8 @@ echo '
     
     </settingsPane>
     
-    <settingsPane description="Touch-to-Wake Opciones" name="Touch-to-Wake Opciones">
+    <settingsPane description="Desde aquí controlará la activación de Touch Wake y el tiempo para activar la pantalla con solo tocarla." 
+		  name="Touch-to-Wake Opciones">
 
        <checkbox description="Touch-to-Wake. Por defecto: Desactivado" 
                 name="Touch-to-Wake" 
@@ -253,15 +270,20 @@ echo '
 	        action="generic /sys/devices/virtual/misc/touchwake/delay" 
                 unit=" sec" min="0" reversed="false" step="5" max="100"/>
 
-       <checkbox description="Knock-On. Por defecto: Desactivado" 
+       <checkbox description="Con Knock-On activado encendará la pantalla con 2 toques. Por defecto: Desactivado" 
                 name="Knock-On" 
                 action="generic01 /sys/class/misc/touchwake/knockon"
                 label="Activar Knock-On"/>
 
-       <seekBar description="Knock-On retardo entre toques en milisegunndos (por defecto son 500ms)." 
+       <seekBar description="Knock-On retardo entre los 2 toques en milisegunndos (por defecto son 500ms)." 
 		name="Knock-On Delay" 
 		action="generic /sys/devices/virtual/misc/touchwake/knockon_delay"
 		unit=" msec" min="0" reversed="false" step="50" max="1000"/>
+
+       <checkbox description="Con esta opción, siempre que el terminal esté cargando el Touch-to-Wake queda siempre activado independientemente del delay configurado. Por defecto: Desactivado" 
+                name="Modo Cargador" 
+                action="generic01 /sys/class/misc/touchwake/charger_mode"
+                label="Activar Modo Cargador"/>
 
    </settingsPane>
   </settingsTab>
