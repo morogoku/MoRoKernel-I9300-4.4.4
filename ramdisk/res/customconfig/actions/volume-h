@@ -1,0 +1,19 @@
+#!/sbin/busybox sh
+
+if [ "a$2" != "a" ];then
+
+filename=$(basename $2)
+
+if [ "a$3" == "a" ];then
+  evalcmd='eval "echo \$$filename"'
+  eval $evalcmd
+else
+  evalcmd='eval "$filename=$3"'
+  eval $evalcmd
+  evalcmd='eval "echo \$$filename"'
+  eval $evalcmd
+
+echo `expr $headphone_volume \* 1` `expr $headphone_volume \* 1` > /sys/class/misc/rem_sound/headphone_volume
+
+fi
+fi

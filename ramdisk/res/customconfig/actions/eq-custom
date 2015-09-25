@@ -1,0 +1,19 @@
+#!/sbin/busybox sh
+
+if [ "a$2" != "a" ];then
+
+filename=$(basename $2)
+
+if [ "a$3" == "a" ];then
+  evalcmd='eval "echo \$$filename"'
+  eval $evalcmd
+else
+  evalcmd='eval "$filename=$3"'
+  eval $evalcmd
+  evalcmd='eval "echo \$$filename"'
+  eval $evalcmd
+
+echo `expr $eq1 \* 1` `expr $eq2 \* 1` `expr $eq3 \* 1` `expr $eq4 \* 1` `expr $eq5 \* 1` > /sys/class/misc/rem_sound/eq_gains
+
+fi
+fi

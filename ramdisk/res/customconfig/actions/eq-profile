@@ -1,0 +1,113 @@
+#!/sbin/busybox sh
+
+if [ "a$2" != "a" ];then
+
+filename=$(basename $2)
+
+if [ "a$3" == "a" ];then
+  evalcmd='eval "echo \$$filename"'
+  eval $evalcmd
+else
+  evalcmd='eval "$filename=$3"'
+  eval $evalcmd
+  evalcmd='eval "echo \$$filename"'
+  eval $evalcmd
+  
+case "$eq_profile" in
+
+  0)# Normal/Custom
+        echo "0 0 0 0 0" > /sys/class/misc/rem_sound/eq_gains
+	write_values(){        
+	eq1="0"
+        eq2="0"
+        eq3="0"
+        eq4="0"
+        eq5="0"
+	eqpresets_predef="0"
+	}
+    ;; 
+  1)# Extreme Bass
+        echo "12 8 3 -1 1" > /sys/class/misc/rem_sound/eq_gains
+	write_values(){         
+	eq1="12"
+        eq2="8"
+        eq3="3"
+        eq4="-1"
+        eq5="1"
+	eqpresets_predef="1"
+	}
+    ;; 
+  2)# Bass-Treble Balance
+        echo "10 7 0 2 5" > /sys/class/misc/rem_sound/eq_gains
+	write_values(){         
+	eq1="10"
+        eq2="7"
+        eq3="0"
+        eq4="2"
+        eq5="5"
+	eqpresets_predef="2"
+	}
+    ;;
+  3)# Treble Gain	  
+        echo "-5 1 0 4 3" > /sys/class/misc/rem_sound/eq_gains
+	write_values(){         
+	eq1="-5"
+        eq2="1"
+        eq3="0"
+        eq4="4"
+        eq5="3"
+	eqpresets_predef="3"
+	}
+    ;; 
+  4)# Classical   
+        echo "0 0 0 -3 -5" > /sys/class/misc/rem_sound/eq_gains
+	write_values(){         
+	eq1="0"
+        eq2="0"
+        eq3="0"
+        eq4="-3"
+        eq5="-5"
+	eqpresets_predef="4"
+	}
+    ;;
+  5)# Pleasant  
+        echo "4 3 2 2 3" > /sys/class/misc/rem_sound/eq_gains
+	write_values(){         
+	eq1="4"
+        eq2="3"
+        eq3="2"
+        eq4="2"
+        eq5="3"
+	eqpresets_predef="5"
+	}
+    ;;
+  6)# Eargasm  
+        echo "12 8 4 2 3" > /sys/class/misc/rem_sound/eq_gains
+    ;;
+  7)# LonasBeats  
+        echo "8 4 2 3 4" > /sys/class/misc/rem_sound/eq_gains
+    ;;
+  8)# BeatsBass  
+        echo "10 8 6 5 7" > /sys/class/misc/rem_sound/eq_gains
+    ;;
+  9)# Enhanced-Sound  
+        echo "9 -3 9 7 8" > /sys/class/misc/rem_sound/eq_gains
+    ;;
+  10)# DeepBass  
+        echo "10 -1 8 4 8" > /sys/class/misc/rem_sound/eq_gains
+    ;;
+  11)# Detonation  
+        echo "9 4 -2 7 11" > /sys/class/misc/rem_sound/eq_gains
+    ;;
+  12)# LonasPower  
+        echo "10 4 3 4 8" > /sys/class/misc/rem_sound/eq_gains
+    ;;
+  13)# BestCream  
+        echo "9 4 10 4 7" > /sys/class/misc/rem_sound/eq_gains
+    ;;
+esac;
+
+fi
+fi
+
+
