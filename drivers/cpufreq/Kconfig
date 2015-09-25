@@ -163,6 +163,10 @@ config CPU_FREQ_DEFAULT_GOV_SMARTASS2
 	help
           Use the CPUFreq governor 'smartassV2' as default.
 
+config CPU_FREQ_DEFAULT_GOV_PEGASUSQPLUS
+	bool "pegasusqplus"
+	select CPU_FREQ_GOV_PEGASUSQPLUS
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -359,7 +363,11 @@ config CPU_FREQ_GOV_SMARTASS2
 	depends on CPU_FREQ
 	help
 		'smartassV2' - a "smart" governor
-		If in doubt, say N.	
+		If in doubt, say N.
+
+config CPU_FREQ_GOV_PEGASUSQPLUS
+	tristate "'pegasusqplus' cpufreq policy governor"
+
 
 config CPU_FREQ_GOV_INTELLIACTIVE
 	tristate "'intelliactive' cpufreq policy governor"
