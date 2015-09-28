@@ -38,6 +38,7 @@ ui_print("Soporte OTA Updater");
 package_extract_dir("ota", "/system");
 set_perm(0, 0, 0644, "/system/kernel.ota.prop");
 set_perm(0, 0, 0644, "/system/ota.prop");
+set_perm(0, 0, 0644, "/system/etc/permissions/com.otaudater.feature.xml");
 ui_print("");
 ui_print("");
 
