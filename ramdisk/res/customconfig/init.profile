@@ -47,8 +47,7 @@ gpu_control_freq=160 266 350 440 533
 gpufreq_predef=0
 gpu_control_threshold=70% 62% 90% 85% 90% 85% 90% 85%
 gputhreshold_predef=0
-gpu_control_uV=875000 900000 950000 1025000 1075000
-gpuvolt_predef=0
+profile_number=1
 
 
 

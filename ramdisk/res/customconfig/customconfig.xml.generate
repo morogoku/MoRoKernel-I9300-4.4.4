@@ -5,7 +5,7 @@ XML=$CONFIG_XML
 echo '
 <settingsRoot>
 
-  <settingsTab name="CPU">
+  <settingsTab name="GOBERNADOR">
       <settingsPane description="PegasusQ es el gobernador por defecto para el funcionamiento diario. Desde aquí podrá modificar los diferentes valores que este contiene, ajústelo a su gusto o bien elegir otro mas acorde a su uso diario." 
                   name="Elegir gobernador Activo">' >> $XML
 echo "
@@ -21,7 +21,11 @@ done
 echo '
 
       </spinner>' >> $XML
+
+	
+
 echo "
+	
 <spinner description=\"Por Defecto: Idle + LPA\" name=\"CPU Idle (ajustes de potencia)\" action=\"enable_mask enable_maskpredef\">
              <spinnerItem name=\"Idle\" value=\"0\"/>
              <spinnerItem name=\"AFTR\" value=\"1\"/>
@@ -30,6 +34,28 @@ echo "
 echo '
       </spinner>
     </settingsPane>
+
+    <settingsPane description="Desde aqui puedes ajustar el Gobernador ZZMOOVE. Elige el perfil que mas se ajuste a tu gusto." 
+                  name="Ajustes ZZMOOVE">
+
+	<spinnerz description="Elige el perfil deseado" 
+		 name="Perfiles ZZMOOVE" 
+		 action="generic /sys/devices/system/cpu/cpufreq/zzmoove/profile_number">
+		<spinnerzItem name="1 Default" value="1"/>
+	  	<spinnerzItem name="2 Yank Battery" value="2"/>
+	  	<spinnerzItem name="3 Yank Battery Extreme" value="3"/>
+	  	<spinnerzItem name="4 ZaneZam Battery" value="4"/>
+	  	<spinnerzItem name="5 ZaneZam Battery Plus" value="5"/>
+		<spinnerzItem name="6 ZaneZam Optimized" value="6"/>
+		<spinnerzItem name="7 ZaneZam Moderate" value="7"/>
+		<spinnerzItem name="8 ZaneZam Performance" value="8"/>
+		<spinnerzItem name="9 ZaneZam InZane" value="9"/>
+		<spinnerzItem name="10 ZaneZam Gaming" value="10"/>
+	</spinnerz>
+    </settingsPane>
+  </settingsTab>
+
+  <settingsTab name="CPU">
     <settingsPane description="Aplicar la configuración de arranque sólo si la que desea llega a ser estable, de lo contrario el equipo puede terminar en un Bucle de reinicios constante o directamente no le arrancará." 
                   name="CPU control switch">
       <checkbox description="Si está activado, los ajustes siguientes se aplicarán en el arranque." 
@@ -288,10 +314,10 @@ echo '
     <settingsPane name="Dynamic FSync" 
                   description="fsync() Sirve como un flush/commit en el búfer de escritura al hacer I/O, escribe al almacenamiento. Se almacena una memoria intermedia con datos y escribe periódicamente en el dispositivo de almacenamiento. Desactivando esto ya no hará esto y directamente escribirá los datos.">
 
-      <checkbox description="Dynamic FSync disables file write synchronosity during screen-on, and re-enables it on screen-off." 
+      <_switch description="Dynamic FSync disables file write synchronosity during screen-on, and re-enables it on screen-off." 
                 name="Activar dynamic FSync" 
                 action="generic01 /sys/kernel/dyn_fsync/Dyn_fsync_active"
-                label="Activar dynamic FSync"/>
+                label="Dynamic FSync"/>
 
     </settingsPane>
     <settingsPane name="Swappiness" 
@@ -531,10 +557,10 @@ echo '
     <settingsPane description="Controlar la forma en que el LED parpadea."
 		  name="Blinking effect">
 
-    <checkbox  description="Ahora podrás activar si deseas el LED frontal con FADE o sin FADE." 
+    <_switch  description="Ahora podrás activar si deseas el LED frontal con FADE o sin FADE." 
                 name="LED Fading" 
                 action="generic01 /sys/class/sec/led/led_fade"
-                label="Activar LED-Fading"/>
+                label="LED-Fading"/>
 
     <seekBar  description="LED Blinking Speed. Por defecto: 1" 
 		name="LED Speed" 
@@ -551,30 +577,30 @@ echo '
     <settingsPane description="Desde aquí controlará la activación de Touch Wake y el tiempo para activar la pantalla con solo tocarla." 
 		  name="Touch-to-Wake Opciones">
 
-       <checkbox description="Touch-to-Wake. Por defecto: Desactivado" 
+       <_switch description="Touch-to-Wake. Por defecto: Desactivado" 
                 name="Touch-to-Wake" 
                 action="generic01 /sys/class/misc/touchwake/enabled"
-                label="Activar Touch-to-Wake"/>
+                label="Touch-to-Wake"/>
 
        <seekBar description="Touch-To-Wake Delay en segundos (Por defecto son 5s). Ajustar el delay (retardo) a 0 hace que Touch-to Wake esté permanentemente activo !!" 
 		name="Touch-To-Wake Delay" 
 	        action="generic /sys/devices/virtual/misc/touchwake/delay" 
                 unit=" sec" min="0" reversed="false" step="5" max="100"/>
 
-       <checkbox description="Con Knock-On activado encendará la pantalla con 2 toques. Por defecto: Desactivado" 
+       <_switch description="Con Knock-On activado encendará la pantalla con 2 toques. Por defecto: Desactivado" 
                 name="Knock-On" 
                 action="generic01 /sys/class/misc/touchwake/knockon"
-                label="Activar Knock-On"/>
+                label="Knock-On"/>
 
        <seekBar description="Knock-On retardo entre los 2 toques en milisegunndos (por defecto son 500ms)." 
 		name="Knock-On Delay" 
 		action="generic /sys/devices/virtual/misc/touchwake/knockon_delay"
 		unit=" msec" min="0" reversed="false" step="50" max="1000"/>
 
-       <checkbox description="Con esta opción, siempre que el terminal esté cargando el Touch-to-Wake queda siempre activado independientemente del delay configurado. Por defecto: Desactivado" 
+       <_switch description="Con esta opción, siempre que el terminal esté cargando el Touch-to-Wake queda siempre activado independientemente del delay configurado. Por defecto: Desactivado" 
                 name="Modo Cargador" 
                 action="generic01 /sys/class/misc/touchwake/charger_mode"
-                label="Activar Modo Cargador"/>
+                label="Modo Cargador"/>
 
    </settingsPane>
   </settingsTab>
