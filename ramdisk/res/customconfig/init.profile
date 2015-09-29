@@ -1,8 +1,8 @@
 internal_read_ahead_kb=256
-sd_read_ahead_kb=512
+sd_read_ahead_kb=256
 charge_level_usb=900
 charge_level_ac=1200
-charge_level_wireless=475
+charge_level_wireless=900
 ignore_unstable_power=on
 ignore_safety_margin=on
 enabled=off
@@ -40,7 +40,15 @@ eqpresets_predef="0"
 minfree_lkm=12288,15360,18432,21504,32768,49152
 minfree_predef=1
 CONTROLSWITCH_CPU=on
+CONTROLSWITCH_BUS=on
 CONTROLSWITCH_LMK=on
+CONTROLSWITCH_GPU=on
+gpu_control_freq=160 266 350 440 533
+gpufreq_predef=0
+gpu_control_threshold=70% 62% 90% 85% 90% 85% 90% 85%
+gputhreshold_predef=0
+gpu_control_uV=875000 900000 950000 1025000 1075000
+gpuvolt_predef=0
 
 
 

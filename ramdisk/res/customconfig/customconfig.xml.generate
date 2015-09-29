@@ -86,6 +86,154 @@ echo '
     </settingsPane>
   </settingsTab>
 
+  <settingsTab name="GPU">
+    <settingsPane description="Aplicar la configuración de arranque sólo si la que desea llega a ser estable, de lo contrario puede que el equipo entre en un Bucle de reinicios o directamente no arrancar." 
+                  name="GPU control switch">
+      <checkbox description="Si está activado, los ajustes siguientes se aplicarán en el arranque." 
+                name="Establecer voltajes de la GPU en el arranque" 
+                action="controlswitch GPU" 
+                label="Establecer en el arranque"/>
+    </settingsPane>' >> $XML
+
+echo "
+    <settingsPane description=\"Selecciona el Perfil que mejor se adapte a tu terminal\" name=\"GPU threshold\">
+      <spinner description=\"Por Defecto: GPU threshold: ExtraBattsave\" name=\"GPU threshold\" action=\"gputhreshold gputhresholdpredef\">
+             <spinnerItem name=\"GPU Threshold: ExtraBattsave\" value=\"0\"/> 
+             <spinnerItem name=\"GPU Threshold: Moderado\" value=\"1\"/> 
+             <spinnerItem name=\"GPU Threshold: Battsave\" value=\"2\"/> 
+             <spinnerItem name=\"GPU Threshold: Normal (Stock)\" value=\"3\"/> 
+             <spinnerItem name=\"GPU Threshold: Semi-Performance\" value=\"4\"/> 
+             <spinnerItem name=\"GPU Threshold: Performance\" value=\"5\"/> 
+      </spinner>
+    </settingsPane>
+" >> $XML
+echo "
+
+    <settingsPane description=\"Selecciona el Perfil que mejor se adapte a tu terminal\" name=\"GPU freq\">
+      <spinner description=\"Por Defecto: GPU freq: 160/266/350/440/533\" name=\"GPU freq\" action=\"gpufreq gpufreqpredef\">
+             <spinnerItem name=\"GPU freq: 160/266/350/400/440\" value=\"1\"/> 
+             <spinnerItem name=\"GPU freq: 160/266/350/440/533\" value=\"0\"/> 
+             <spinnerItem name=\"GPU freq: 266/350/440/533/640\" value=\"2\"/> 
+             <spinnerItem name=\"GPU freq: 350/440/533/640/666\" value=\"3\"/> 
+             <spinnerItem name=\"GPU freq: 440/533/600/640/700\" value=\"4\"/> 
+             <spinnerItem name=\"GPU freq: 533/600/640/700/733\" value=\"5\"/> 
+             <spinnerItem name=\"GPU freq: 600/640/700/733/750\" value=\"6\"/> 
+             <spinnerItem name=\"GPU freq: 640/700/733/750/800\" value=\"7\"/> 
+      </spinner>
+    </settingsPane>
+
+" >> $XML
+echo "
+    
+    <settingsPane description=\"La disminución de tensión reducirá el consumo de energía de la GPU. El aumento en las frecuencias de overclocking mejora la estabilidad. Demasiado bajo voltaje puede causar inestabilidad y puede quedarse congelado (Colgado).\" 
+                name=\"GPU voltage control\">" >> $XML
+
+while read FREQ UVOLT; do
+  echo "
+      <seekBar  description=\"Voltage por defecto: $UVOLT µV\" 
+	        name=\"${FREQ}\" 
+                action=\"gpuvolt2 ${FREQ}\"
+                unit=\"µV\" min=\"775000\" reversed=\"false\" step=\"12500\" max=\"1300000\"/>" >> $XML
+  GPUFREQLIST="$GPUFREQLIST $FREQ"
+done < /sys/devices/virtual/misc/gpu_control/gpu_voltage_control
+
+echo "
+    </settingsPane>
+      
+" >> $XML
+echo '
+  </settingsTab>
+
+  <settingsTab name="Bus">
+    <settingsPane description="Aplicar la configuración de arranque sólo si la que desea llega a ser estable, de lo contrario el equipo termina en un Bucle de reinicios o directamente no arrancará. Si se desactiva, los valores mostrados no corresponden a los valores reales actuales, los valores correctos de los perfiles están guardados." 
+                  name="MIF/INT voltage control switch">
+      <checkbox description="Si está activado, los ajustes siguientes se aplicarán en el arranque." 
+                name="Establecer voltajes del bus en el arranque" 
+                action="controlswitch BUS" 
+                label="Establecer en el arranque"/>
+    </settingsPane>
+
+    <settingsPane description="Modifica los Voltajes Internos del BUS"
+                  name="Internal voltage">'>> $XML
+
+while read FREQ VOLT; do
+  S_FREQ=`echo $FREQ | cut -c 4-`
+  evalcmd='eval echo \$INT_$S_FREQ'
+  if [ "a`eval $evalcmd`" == "a" ]; then
+    eval "INT_$S_FREQ=$VOLT"
+    echo "<seekBar  description=\"Default voltage: $VOLTµV\" 
+	          name=\"${S_FREQ} MHz step\" 
+                  action=\"intvolt ${S_FREQ}\"
+                  unit=\"µV\" min=\"600000\" reversed=\"false\" step=\"12500\" max=\"1150000\"/>" >> $XML
+  fi
+done < /sys/devices/system/cpu/busfreq/int_volt_table
+
+echo  '
+    </settingsPane>
+    <settingsPane description="Modifica los Voltajes de la Memoria del BUS"
+                  name="Memory voltage">'>> $XML
+
+while read FREQ VOLT; do
+  S_FREQ=`echo $FREQ | cut -c 1-3`
+  evalcmd='eval echo \$MIF_$S_FREQ'
+  if [ "a`eval $evalcmd`" == "a" ]; then
+    eval "MIF_$S_FREQ=$VOLT"
+    echo "<seekBar  description=\"Default voltage: $VOLTµV\" 
+	          name=\"${S_FREQ} MHz step\" 
+                  action=\"mifvolt ${S_FREQ}\"
+                  unit=\"µV\" min=\"750000\" reversed=\"false\" step=\"25000\" max=\"1100000\"/>" >> $XML
+  fi
+done < /sys/devices/system/cpu/busfreq/mif_volt_table
+
+echo '
+    </settingsPane>
+
+    <settingsPane description="MIF/INT representa el interfaz de memoria SoCs y componentes internos."
+                  name="Mif/Int control">' >> $XML
+
+echo "
+      <seekBar description=\"El período de muestreo en la que el monitor DVFS toma la decisión. Por defecto: `cat /sys/devices/system/cpu/busfreq/sampling_rate`µS.\"
+               name=\"sampling_rate\" 
+               action=\"generictag BUS /sys/devices/system/cpu/busfreq/sampling_rate\"
+               unit=\"µS\" min=\"10000\" reversed=\"false\" step=\"5000\" max=\"200000\"/>
+
+      <seekBar description=\"La Unidad de Supervisión del rendimiento de la plataforma (PPMU) recopila información de uso del bus a nivel de hardware de la CPU y los dos controladores de memoria (DMC). Por defecto: `cat /sys/devices/system/cpu/busfreq/load_history_size`.\"
+               name=\"Load history size\" 
+               action=\"generictag BUS /sys/devices/system/cpu/busfreq/load_history_size\"
+               unit=\"samples\" min=\"1\" reversed=\"false\" step=\"1\" max=\"5\"/>
+
+      <seekBar description=\"El umbral máximo por encima del cual DMC se excede la carga media de los controladores de memoria en la última muestra, se establece el paso máximo de OPP. Por defecto: `cat /sys/devices/system/cpu/busfreq/dmc_max_threshold`.\"
+               name=\"DMC maximum threshold\" 
+               action=\"generictag BUS /sys/devices/system/cpu/busfreq/dmc_max_threshold\"
+               unit=\"%\" min=\"1\" reversed=\"false\" step=\"1\" max=\"99\"/>
+
+      <seekBar description=\"El umbral de inactividad, que, si el controlador de memoria cae por debajo de ella, reduce el paso de OPP por un paso. Si la carga cae en activo entre el umbral de inactividad y el umbral máximo de DMC, el promedio DMC la carga sobre el tamaño de historia de carga son tomadas y se normaliza a la frecuencia máxima de OPP. Por defecto: `cat /sys/devices/system/cpu/busfreq/idle_threshold`.\"
+               name=\"Idle threshold\" 
+               action=\"generictag BUS /sys/devices/system/cpu/busfreq/idle_threshold\"
+               unit=\"%\" min=\"1\" reversed=\"false\" step=\"1\" max=\"50\"/>
+
+      <seekBar description=\"El umbral del bus de CPU máximo por encima del cual se supera la carga del bus de la CPU sobre la última muestra, se establece el paso máximo de OPP. Por defecto: `cat /sys/devices/system/cpu/busfreq/max_cpu_threshold`.\"
+               name=\"Maximum CPU bus threshold\" 
+               action=\"generictag BUS /sys/devices/system/cpu/busfreq/max_cpu_threshold\"
+               unit=\"%\" min=\"1\" reversed=\"false\" step=\"1\" max=\"99\"/>
+
+      <seekBar description=\"El bus de la CPU hasta el umbral, en realidad actúa como umbral delimitador de clases, si la carga excede up_threshold pero no supera el umbral máximo de la CPU, que toma en cuenta el tamaño de la carga de la CPU y baja un paso, si la condición pendiente no se cumple, la frecuencia del bus de la CPU se queda igual. Por defecto: `cat /sys/devices/system/cpu/busfreq/up_cpu_threshold`.\"
+               name=\"Up CPU threshold\" 
+               action=\"generictag BUS /sys/devices/system/cpu/busfreq/up_cpu_threshold\"
+               unit=\"%\" min=\"1\" reversed=\"false\" step=\"1\" max=\"99\"/>
+
+      <seekBar description=\"CPU tamaño pendiente se define por la diferencia de carga de la muestra actual a la muestra anterior. Si la pendiente supera el valor establecido, la frecuencia del bus de CPU de destino se baja solo un paso. Por defecto: `cat /sys/devices/system/cpu/busfreq/cpu_slope_size`.\"
+               name=\"CPU slope size\" 
+               action=\"generictag BUS /sys/devices/system/cpu/busfreq/cpu_slope_size\"
+               unit=\"%\" min=\"1\" reversed=\"false\" step=\"1\" max=\"50\"/>
+
+" >> $XML
+
+echo  '
+    </settingsPane>
+
+  </settingsTab>
+
   <settingsTab name="I/O">
     <settingsPane description="Seeleccione el I/O schedulers que mas se ajuste a sus necesidades, por defecto esta activado ROW."  
                   name="I/O schedulers">' >> $XML
@@ -227,10 +375,10 @@ echo '
     
     <settingsPane name="Activacion de Remsound" 
                   description="">
-      <checkbox name="Remsound" 
+      <_switch name="" 
                 description="Activa o desactiva el sistema de sonido Remsound" 
                 action="generic01 /sys/class/misc/rem_sound/rem_sound"
-                label="Activar Remsound"/>
+                label="REMSOUND"/>
     </settingsPane>
 
     <settingsPane name="Volumen"
@@ -238,11 +386,11 @@ echo '
       <seekBar name="Volumen Auriculares" 
                description="Aumentar volumen de los auriculares" 
                action="volume-h headphone_volume"
-               unit="" min="20" reversed="false" step="1" max="63"/>
+               unit="" min="0" reversed="false" step="1" max="63"/>
       <seekBar name="Volumen Altavoz" 
                description="Aumentar volumen del altavoz" 
                action="volume-s speaker_volume"
-               unit="" min="57" reversed="false" step="1" max="63"/>
+               unit="" min="0" reversed="false" step="1" max="63"/>
     </settingsPane>
 
     <settingsPane name="Control de Micrófono"
@@ -259,30 +407,30 @@ echo '
 
     <settingsPane name="GENERAL"
                   description="">
-      <checkbox name="DAC Directo" 
+      <_switch name="DAC Directo" 
                 description="Pasar por alto el canal analógico" 
                 action="generic01 /sys/class/misc/rem_sound/dac_direct"
-                label="Activar DAC Directo"/>
-      <checkbox name="DAC Sobremuestreo" 
+                label="DAC Directo"/>
+      <_switch name="DAC Sobremuestreo" 
                 description="128x Sobre muestreo" 
                 action="generic01 /sys/class/misc/rem_sound/dac_oversampling"
-                label="Activar DAC Sobremuestreo"/>
-      <checkbox name="FLL Tuning" 
+                label="DAC Sobremuestreo"/>
+      <_switch name="FLL Tuning" 
                 description="Ajuste para una mejor calidad" 
                 action="generic01 /sys/class/misc/rem_sound/fll_tuning"
-                label="Activar FLL Tuning"/>
-      <checkbox name="Speaker Tuning" 
+                label="FLL Tuning"/>
+      <_switch name="Speaker Tuning" 
                 description="Mejora la calidad del sonido cuando se reproduce  por el altavoz" 
                 action="generic01 /sys/class/misc/rem_sound/speaker_tuning"
-                label="Activar Speaker Tuning"/>
-      <checkbox name="Modo de privacidad" 
+                label="Speaker Tuning"/>
+      <_switch name="Modo de privacidad" 
                 description="Silenciar el altavoz del terminal al conectar loa auriculares" 
                 action="generic01 /sys/class/misc/rem_sound/privacy_mode"
-                label="Activar Modo Privacidad"/>
-      <checkbox name="Forzar a Mono" 
+                label="Modo Privacidad"/>
+      <_switch name="Forzar a Mono" 
                 description="Fuerza a Mono la salida de audio" 
                 action="generic01 /sys/class/misc/rem_sound/mono_downmix"
-                label="Activar Salida Mono"/>
+                label="Salida Mono"/>
       <seekBar name="Expansión Estéreo"
                description="Aumenta la profundidad y claridad de la música"
 	       action="generic /sys/class/misc/rem_sound/stereo_expansion" 
@@ -367,12 +515,12 @@ echo '
     <settingsPane description="Ajustes para cuando tenemos carga inestable debida a cables o cargadores en mal estado y notamos que nos tarda mucho en cargar aun habiendo aumentado el nivel de carga AC/USB"
                  name="carga inestable">
 
-      <checkbox description="Para aquellos con problemas de carga inestable, si no te carga a mas de 475mA puedes probar activando esta opción." 
+      <_switch description="Para aquellos con problemas de carga inestable, si no te carga a mas de 475mA puedes probar activando esta opción." 
                 name="Ignorar carga inestable" 
                 action="generic01 /sys/kernel/charge_levels/ignore_unstable_power"
                 label="Activar Ignorar carga inestable"/>
 
-      <checkbox description="Para aquellos con problemas de carga, pueden probar activando también esta opción." 
+      <_switch description="Para aquellos con problemas de carga, pueden probar activando también esta opción." 
                 name="Ignorar márgenes seguros" 
                 action="generic01 /sys/kernel/charge_levels/ignore_safety_margin"
                 label="Activar Ignorar márgenes seguros"/>
