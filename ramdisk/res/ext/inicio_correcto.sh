@@ -35,7 +35,6 @@ $BB chown -R root:root /tmp;
 $BB chown -R root:root /res;
 $BB chown -R root:root /sbin;
 $BB chown -R root:root /lib;
-$BB chown -R root:root /system;
 
 # oom and mem perm fix
 $BB chmod 666 /sys/module/lowmemorykiller/parameters/cost;

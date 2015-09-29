@@ -1,7 +1,7 @@
 #!/sbin/busybox sh
 #
-# Script inicio moro-init.sh
-# por Javilonas
+# Script inicio lonas-init.sh
+#
 
 BB=/sbin/busybox
 
@@ -35,6 +35,9 @@ $BB mount -t rootfs -o remount,rw rootfs
 
 # Iniciar Init.d
 /res/ext/init_d2.sh
+
+# Iniciar MTweaks
+/res/ext/mtweaks.sh
 
 $BB sync
 
