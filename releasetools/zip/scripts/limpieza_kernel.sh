@@ -9,12 +9,16 @@ rm /data/app/com.arter97.aswitch-*.apk
 rm /data/app/com.arter97.atweaks-*.apk
 rm /data/app/com.javilonas.tpowercc.app-*.apk
 rm /data/app/com.lonas.remsound-*.apk
+rm /data/app/com.xpure.xtweaks.app-*.apk
+rm /data/app/com.morogoku.mtweaks.app-*.apk
+
 rm /system/app/aSwitch.apk
 rm /system/app/aTweaks.apk
 rm /system/app/XTweaks.apk
 rm /system/app/MTweaks.apk
-rm /data/app/com.xpure.xtweaks.app-*.apk
+
 rm /system/kernel.ota.prop
+
 rm -Rf /data/data/de.andip71.boeffla_config_v2
 rm -Rf /data/data/com.arter97.aswitch
 rm -Rf /data/data/com.arter97.atweaks

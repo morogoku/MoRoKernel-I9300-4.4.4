@@ -29,8 +29,8 @@ ui_print("");
 ui_print("");
 
 ui_print("Instalando MTWeaks");
-package_extract_dir("data", "/data");
-set_perm(0, 0, 0644, "/data/app/MTweaks.apk");
+package_extract_dir("app", "/system/app");
+set_perm(0, 0, 0644, "/system/app/MTweaks.apk");
 ui_print("");
 ui_print("");
 
