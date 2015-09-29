@@ -74,7 +74,7 @@ static ssize_t gpu_voltage_show(struct device *dev, struct device_attribute *att
 	int i, j = 0;
    	for (i = 0; i < MALI_DVFS_STEPS; i++)
 	{
-	    j += sprintf(&buf[j], "Step%d: %d\n", i, mali_dvfs[i].vol);
+	    j += sprintf(&buf[j], "Step%d %d\n", i, mali_dvfs[i].vol);
 	}
    return j;
 }
@@ -115,7 +115,7 @@ static ssize_t gpu_clock_show(struct device *dev, struct device_attribute *attr,
 	int i, j = 0;
    	for (i = 0; i < MALI_DVFS_STEPS; i++)
 	{
-	    j += sprintf(&buf[j], "Step%d: %d\n", i, mali_dvfs[i].clock);
+	    j += sprintf(&buf[j], "Step%d %d\n", i, mali_dvfs[i].clock);
 	}
 
    	for (i = 0; i < MALI_DVFS_STEPS - 1; i++)
@@ -231,7 +231,7 @@ static ssize_t gpu_voltage_delta_show(struct device *dev, struct device_attribut
 	int i, j = 0;
    	for (i = 0; i < MALI_DVFS_STEPS; i++)
 	{
-	    j += sprintf(&buf[j], "Step%d: %d\n", i, gpu_voltage_delta[i]);
+	    j += sprintf(&buf[j], "Step%d %d\n", i, gpu_voltage_delta[i]);
 	}
    return j;
 
