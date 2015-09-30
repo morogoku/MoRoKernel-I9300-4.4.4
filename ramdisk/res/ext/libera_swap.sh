@@ -5,7 +5,9 @@
 #
 # modificado por morogoku
 
+MORO_LOGFILE="/data/.moro/moro-kernel.log"
 BB=/sbin/busybox
+
 
 $BB renice 19 `pidof libera_swap.sh`
 DROP_ONE="1"
@@ -28,6 +30,9 @@ do
 		$BB swapoff /dev/block/vnswap0 > /dev/null 2>&1
 		$BB swapon -p 2 /dev/block/vnswap0 > /dev/null 2>&1
                 $BB sync
+		echo $(date) "Swap libre="$FREE", muy bajo, liberando..." >> $MORO_LOGFILE
+	else
+		echo $(date) "Swap libre="$FREE", tamaño normal" >> $MORO_LOGFILE
         fi
 sleep 1200
 done
