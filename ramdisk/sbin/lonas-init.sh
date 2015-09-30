@@ -9,24 +9,6 @@ BB=/sbin/busybox
 $BB mount -o remount,rw -t auto /system
 $BB mount -t rootfs -o remount,rw rootfs
 
-# Logfile de kernel boeffla, adaptado por morogoku
-# define file paths
-	MORO_LOGFILE="/data/.moro/moro-kernel.log"
-
-# maintain log file history
-	rm $MORO_LOGFILE.3
-	mv $MORO_LOGFILE.2 $MORO_LOGFILE.3
-	mv $MORO_LOGFILE.1 $MORO_LOGFILE.2
-	mv $MORO_LOGFILE $MORO_LOGFILE.1
-
-# Initialize the log file (chmod to make it readable also via /sdcard link)
-	echo $(date) MoRo-Kernel initialisation started > $MORO_LOGFILE
-	/sbin/busybox chmod 777 $MORO_LOGFILE
-	/sbin/busybox cat /proc/version >> $MORO_LOGFILE
-	echo "=========================" >> $MORO_LOGFILE
-	/sbin/busybox grep ro.build.version /system/build.prop >> $MORO_LOGFILE
-	echo "=========================" >> $MORO_LOGFILE
-
 
 # Iniciar Liberar Memoria
 /res/ext/libera_swap.sh &
