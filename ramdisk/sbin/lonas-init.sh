@@ -11,7 +11,7 @@ $BB mount -t rootfs -o remount,rw rootfs
 
 
 # Iniciar Liberar Memoria
-/res/ext/libera_swap.sh &
+/res/ext/libera_ram.sh &
 $BB renice 19 `pidof libera_swap.sh`
 
 # Detectar y generar INIT.D
