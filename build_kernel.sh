@@ -18,8 +18,8 @@ if [ "${1}" != "" ];then
   export KERNELDIR=`readlink -f ${1}`
 fi
 
-TOOLCHAIN="/home/moro/kernel/toolchains/arm-eabi-4.4.3/bin/arm-eabi-"
-TOOLCHAIN_PATCH="/home/moro/kernel/toolchains/arm-eabi-4.4.3/bin"
+TOOLCHAIN="/home/moro/kernel/toolchains/arm-eabi-UBER-4.9/bin/arm-eabi-"
+TOOLCHAIN_PATCH="/home/moro/kernel/toolchains/arm-eabi-UBER-4.9/bin"
 ROOTFS_PATH="/home/moro/kernel/MoRoKernel-I9300-4.4.4/ramdisk"
 RAMFS_TMP="/home/moro/kernel/tmp/ramfs-source-sgs3"
 

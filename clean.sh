@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TOOLCHAIN="/home/moro/kernel/toolchains/arm-eabi-4.4.3/bin/arm-eabi-"
+TOOLCHAIN="/home/moro/kernel/toolchains/arm-eabi-UBER-4.9/bin/arm-eabi-"
 DIR="/home/moro/kernel/MoRoKernel-I9300-4.4.4"
 
 echo "#################### Eliminando Restos ####################"

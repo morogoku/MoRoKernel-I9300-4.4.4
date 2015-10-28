@@ -369,7 +369,9 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
 		   -fno-delete-null-pointer-checks \
-		   -pipe -std=gnu89
+		   -pipe -std=gnu89 \
+		   -marm -march=armv7-a \
+		   -mcpu=cortex-a9 -mtune=cortex-a9 -fno-pic
 
 # L1/L2 cache size parameters
 KBUILD_CFLAGS	+= --param l1-cache-size=32 --param l1-cache-line-size=32 --param l2-cache-size=1024
