@@ -299,6 +299,22 @@ echo '
                unit="kB" min="128" reversed="false" step="128" max="2048"/>
     </settingsPane>
 
+    <settingsPane name="ZSWAP" 
+                  description="Desde aquí podrá aumentar o disminuir el tamaño de ZSWAP, un valor 0 desactiva el ZSWAP">
+      <seekBar description="Por defecto: 512 MB" 
+               name="ZSWAP" 
+               action="zswap"
+               unit="mB" min="0" reversed="false" step="32" max="1024"/>      
+    </settingsPane>
+
+    <settingsPane name="Swappiness" 
+                  description="Un valor bajo significa que el kernel va a tratar de evitar el intercambio tanto como sea posible, por contra en un valor más alto intentará de usar el espacio de intercambio de un modo mas agresivo, en resumen: al bajar su valor, le indicamos que use mas caché y menos swap y al subirlo le estamos indicamos al sistema, que use mas Swap y menos caché y memoria RAM. un Valor 0 desactivaría el intercambio de memoria (swap o zram)">   
+      <seekBar description="Por defecto: 130" 
+               name="Virtual machine swappiness" 
+               action="generic /proc/sys/vm/swappiness"
+               unit="%" min="0" reversed="false" step="5" max="150"/>
+    </settingsPane>
+
     <settingsPane description="TCP Control" name="TCP Control">
 
 	<spinner description="opciones para cambiar la unidad de congestión TCP" name="TCP Congestion Control" action="generic /proc/sys/net/ipv4/tcp_congestion_control">
@@ -320,13 +336,7 @@ echo '
                 label="Dynamic FSync"/>
 
     </settingsPane>
-    <settingsPane name="Swappiness" 
-                  description="Un valor bajo significa que el kernel va a tratar de evitar el intercambio tanto como sea posible, por contra en un valor más alto intentará de usar el espacio de intercambio de un modo mas agresivo, en resumen: al bajar su valor, le indicamos que use mas caché y menos swap y al subirlo le estamos indicamos al sistema, que use menos Swap y mas caché y memoria RAM. un Valor 0 desactivaría el intercambio de memoria (swap o zram)">   
-      <seekBar description="Por defecto: 130." 
-               name="Virtual machine swappiness" 
-               action="generic /proc/sys/vm/swappiness"
-               unit="%" min="0" reversed="false" step="5" max="150"/>
-    </settingsPane>
+    
     <settingsPane name="Min Free kbytes" 
                   description="Modificando el valor (en bytes) de /proc/sys/vm/min_free_kbytes, lo que hacemos es redefinir el espacio de memoria libre de que dispone el kernel para cuando la necesita para el sistema, abrir una app, etc.. Lo que hace este ajuste es reservar un mínimo de memoria para el propio sistema. Valores recomendados: 1448k, 2048k, 2896k, 3642k, 4096k, 5792k, 8192k, 11584k, 12288k, 12360k, 16284k y 18360k. Dependerá de este valor el rendimiento de tu sistema">
       <seekBar description="El mínimo a poder seleccionar es 1448k y el máximo 18360k. Por defecto: 3638 kbytes." 

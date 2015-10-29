@@ -48,6 +48,8 @@ gpufreq_predef=0
 gpu_control_threshold=70% 62% 90% 85% 90% 85% 90% 85%
 gputhreshold_predef=0
 profile_number=1
+zswap_size=600
+swappiness=80
 
 
 
