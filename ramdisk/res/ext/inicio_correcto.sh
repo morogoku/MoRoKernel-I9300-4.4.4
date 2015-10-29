@@ -17,9 +17,9 @@ $BB rm -rf /data/tombstones/* 2> /dev/null;
 $BB rm -rf /data/anr/* 2> /dev/null;
 
 # critical Permissions fix
-$BB chown -R root:system /sys/devices/system/cpu/;
-$BB chown -R system:system /data/anr;
-$BB chown -R root:radio /data/property/;
+$BB chown -R 0:1000 /sys/devices/system/cpu/;
+$BB chown -R 1000:1000 /data/anr;
+$BB chown -R 0:1001 /data/property/;
 $BB chmod -R 777 /tmp/;
 $BB chmod -R 6755 /sbin/ext/;
 $BB chmod -R 0777 /dev/cpuctl/;
@@ -31,10 +31,10 @@ $BB chmod -R 0770 /data/property/;
 $BB chmod -R 0400 /data/tombstones;
 
 # fix owners on critical folders
-$BB chown -R root:root /tmp;
-$BB chown -R root:root /res;
-$BB chown -R root:root /sbin;
-$BB chown -R root:root /lib;
+$BB chown -R 0:0 /tmp;
+$BB chown -R 0:0 /res;
+$BB chown -R 0:0 /sbin;
+$BB chown -R 0:0 /lib;
 
 # oom and mem perm fix
 $BB chmod 666 /sys/module/lowmemorykiller/parameters/cost;
@@ -48,6 +48,9 @@ echo "2" > /proc/sys/kernel/sysrq;
 
 # fix storage folder owner
 $BB chown system.sdcard_rw /storage;
+
+# Play sound for Remsound compatibility
+/sbin/tinyplay /res/misc/silence.wav -D 0 -d 0 -p 880
 
 
 # Now wait for the rom to finish booting up

@@ -7,7 +7,15 @@ BB=/sbin/busybox
 
 # Inicio
 $BB mount -o remount,rw -t auto /system
+$BB mount -o remount,rw -t auto /data
 $BB mount -t rootfs -o remount,rw rootfs
+
+# Crear carpeta /data/.moro si no existe
+if [ ! -d /data/.moro ] ; then
+	$BB mkdir /data/.moro
+	$BB chmod 0777 /data/.moro
+	$BB chown 0.0 /data/.moro
+fi
 
 # Detectar y generar INIT.D
 /res/ext/init_d.sh
@@ -42,4 +50,5 @@ $BB mount -t rootfs -o remount,rw rootfs
 $BB sync
 
 $BB mount -t rootfs -o remount,ro rootfs
+$BB mount -o remount,rw -t auto /data
 $BB mount -o remount,ro -t auto /system

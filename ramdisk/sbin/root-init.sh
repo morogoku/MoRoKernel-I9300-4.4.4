@@ -26,12 +26,12 @@ fi
 if [ ! -f /system/xbin/su ] && [ ! -f /system/bin/su ]; then
 
 $BB mkdir /system/bin/.ext
-$BB cp /sbin/su /system/xbin/su
-$BB cp /sbin/daemonsu /system/xbin/daemonsu
+$BB cp /res/misc/su /system/xbin/su
+$BB cp /res/misc/su /system/xbin/daemonsu
 $BB cp /system/lib/libsupol.so /system/lib/libsupol.so
-$BB cp /sbin/su /system/bin/.ext/.su
-$BB cp /res/ext/install-recovery.sh /system/etc/install-recovery.sh
-$BB cp /res/ext/99SuperSUDaemon /system/etc/init.d/99SuperSUDaemon
+$BB cp /res/misc/su /system/bin/.ext/.su
+$BB cp /res/misc/install-recovery.sh /system/etc/install-recovery.sh
+$BB cp /res/misc/99SuperSUDaemon /system/etc/init.d/99SuperSUDaemon
 $BB echo /system/etc/.installed_su_daemon
 
 $BB chown 0.0 /system/bin/.ext
@@ -60,9 +60,9 @@ fi
 $BB sleep 1
 
 # Aplicar Fstrim
-$BB /sbin/fstrim -v /data
-$BB /sbin/fstrim -v /cache
-$BB /sbin/fstrim -v /system
+$BB fstrim -v /data
+$BB fstrim -v /cache
+$BB fstrim -v /system
 
 $BB sync
 

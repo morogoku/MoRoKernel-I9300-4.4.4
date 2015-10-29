@@ -5,8 +5,8 @@
 
 BB=/sbin/busybox
 
-LOG_FILE=/data/zipalign.log;
-ZIPALIGNDB=/data/zipalign.db;
+LOG_FILE=/data/.moro/zipalign.log;
+ZIPALIGNDB=/data/.moro/zipalign.db;
 
 if [ -e $LOG_FILE ]; then
 	rm $LOG_FILE;
@@ -18,7 +18,7 @@ fi;
 
 echo "Starting FV Automatic ZipAlign $( date +"%m-%d-%Y %H:%M:%S" )" | tee -a $LOG_FILE;
 
-for DIR in /system/app /data/app; do
+for DIR in /system/app /system/priv-app /system/framework /data/app; do
 	cd $DIR;
 	for APK in *.apk; do
 		if [ $APK -ot $ZIPALIGNDB ] && [ $(grep "$DIR/$APK" $ZIPALIGNDB|wc -l) -gt 0 ]; then

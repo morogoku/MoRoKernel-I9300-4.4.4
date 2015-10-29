@@ -5,40 +5,31 @@
 
 BB=/sbin/busybox
 
-$BB chmod 755 /res/customconfig/actions/chargeaccurrent
-$BB chmod 755 /res/customconfig/actions/chargeusbcurrent
-$BB chmod 755 /res/customconfig/actions/controlswitch
-$BB chmod 755 /res/customconfig/actions/cpugeneric
-$BB chmod 755 /res/customconfig/actions/cpuvolt
-$BB chmod 755 /res/customconfig/actions/enable_mask
-$BB chmod 755 /res/customconfig/actions/eq-custom
-$BB chmod 755 /res/customconfig/actions/eqpresets
-$BB chmod 755 /res/customconfig/actions/eq-profile
-$BB chmod 755 /res/customconfig/actions/generic
-$BB chmod 755 /res/customconfig/actions/generic01
-$BB chmod 755 /res/customconfig/actions/generictag
-$BB chmod 755 /res/customconfig/actions/generictagforce
-$BB chmod 755 /res/customconfig/actions/gpufreq
-$BB chmod 755 /res/customconfig/actions/gputhreshold
-$BB chmod 755 /res/customconfig/actions/gpuvolt
-$BB chmod 755 /res/customconfig/actions/gpuvolt2
-$BB chmod 755 /res/customconfig/actions/intvolt
-$BB chmod 755 /res/customconfig/actions/iosched
-$BB chmod 755 /res/customconfig/actions/mdnie
-$BB chmod 755 /res/customconfig/actions/mifvolt
-$BB chmod 755 /res/customconfig/actions/minfree
-$BB chmod 755 /res/customconfig/actions/volume-h
-$BB chmod 755 /res/customconfig/actions/volume-s
-$BB chmod 755 /res/customconfig/actions/zram
+# Save original voltages
+$BB mkdir /data/.moro/bk
+$BB chmod 0777 /data/.moro/bk
+$BB chown 0.0 /data/.moro/bk
 
-$BB chmod 755 /res/customconfig/customconfig-helper
-$BB chmod 755 /res/customconfig/customconfig.xml.generate
+$BB cat /sys/devices/system/cpu/cpu0/cpufreq/UV_mV_table > /data/.moro/bk/bk_orig_cpu_voltage
+$BB cat /sys/class/misc/gpu_control/gpu_clock_control > /data/.moro/bk/bk_orig_gpu_clock
+$BB cat /sys/class/misc/gpu_control/gpu_voltage_control > /data/.moro/bk/bk_orig_gpu_voltage
+
+$BB chmod 755 /data/.moro/bk/*
+$BB chown 0.0 /data/.moro/bk/*
+	
+# MTweaks support
+$BB chmod -R 755 /res/customconfig/*
+$BB chown -R 0:0 /res/customconfig/*
+$BB chmod -R 755 /res/customconfig/actions/*
+$BB chown -R 0:0 /res/customconfig/actions/*
 
 $BB rm /data/.moro/customconfig.xml
 $BB rm /data/.moro/action.cache
 
-
 $BB chmod 755 /res/uci.sh
+$BB chown 0.0 /res/uci.sh
+
 /res/uci.sh apply
 
+$BB sync
 
