@@ -565,11 +565,36 @@ endif # $(dot-config)
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 all: vmlinux
 
-ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os
-else
-KBUILD_CFLAGS	+= -O2
-endif
+
+# MoRoKernel Flags (by JustArchi of ArchiKernel)
+
+# S3 Cortex A9 optimization
+KBUILD_CFLAGS	+= -marm -march=armv7-a -mcpu=cortex-a9 \
+		   -mtune=cortex-a9 -mfloat-abi=softfp -mfpu=neon
+
+# Main optimization level
+KBUILD_CFLAGS	+= -O3
+
+# LDFLAGS
+LDFLAGS 	+= -O3 --sort-common
+
+# Graphite
+KBUILD_CFLAGS 	+= -fgraphite -fgraphite-identity -floop-block \
+		   -floop-interchange -floop-nest-optimize \
+		   -floop-strip-mine -floop-parallelize-all
+
+# Other flags
+KBUILD_CFLAGS	+= -DNDEBUG -fsection-anchors -funsafe-loop-optimizations \
+		   -fivopts -ftree-loop-im -ftree-loop-ivcanon -funswitch-loops \
+		   -frename-registers -fgcse-sm -fgcse-las -fweb -ftracer \
+		   -fipa-pta -fmodulo-sched -fmodulo-sched-allow-regmoves
+
+
+#ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
+#KBUILD_CFLAGS	+= -Os
+#else
+#KBUILD_CFLAGS	+= -O2
+#endif
 
 ifdef CONFIG_CC_CHECK_WARNING_STRICTLY
 KBUILD_CFLAGS	+= -fdiagnostics-show-option -Werror \
