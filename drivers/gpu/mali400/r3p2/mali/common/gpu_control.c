@@ -165,9 +165,6 @@ static ssize_t gpu_clock_store(struct device *dev, struct device_attribute *attr
 			    }
 			}
                 }
-    	// reupdate mali dvfs table
-    	mali_dvfs_table_update();
-
         }
 
         step0_clk = mali_dvfs[0].clock;

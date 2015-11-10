@@ -13,5 +13,3 @@
 #include "../platform/pegasus-m400/exynos4_pmm.h"
 
 void gpu_control_start(void);
-
-mali_bool mali_dvfs_table_update(void);
