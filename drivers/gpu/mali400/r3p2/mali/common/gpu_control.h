@@ -15,4 +15,3 @@
 void gpu_control_start(void);
 
 mali_bool mali_dvfs_table_update(void);
-extern int gpu_voltage_default[MALI_DVFS_STEPS];
