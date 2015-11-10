@@ -873,7 +873,6 @@ static void mali_dvfs_work_handler(struct work_struct *w)
 	    if (step0_clk != mali_dvfs[0].clock) {
                 MALI_PRINT(("::: step0_clk change to %d Mhz\n", step0_clk));
                 mali_dvfs[0].clock = step0_clk;
-		gpu_voltage_delta_reset(0);
 		needs_update=1;
 	    }
         }
@@ -882,7 +881,6 @@ static void mali_dvfs_work_handler(struct work_struct *w)
 	    if (step1_clk != mali_dvfs[1].clock) {
                 MALI_PRINT(("::: step1_clk change to %d Mhz\n", step1_clk));
                 mali_dvfs[1].clock = step1_clk;
-		gpu_voltage_delta_reset(1);
 		needs_update=1;
 	    }
         }
@@ -899,7 +897,6 @@ static void mali_dvfs_work_handler(struct work_struct *w)
 	    if (step2_clk != mali_dvfs[2].clock) {
                 MALI_PRINT(("::: step2_clk change to %d Mhz\n", step2_clk));
                 mali_dvfs[2].clock = step2_clk;
-		gpu_voltage_delta_reset(2);
 		needs_update=1;
 	    }
         }
@@ -916,7 +913,6 @@ static void mali_dvfs_work_handler(struct work_struct *w)
 	    if (step3_clk != mali_dvfs[3].clock) {
                 MALI_PRINT(("::: step3_clk change to %d Mhz\n", step3_clk));
                 mali_dvfs[3].clock = step3_clk;
-		gpu_voltage_delta_reset(3);
 		needs_update=1;
 	    }
         }
@@ -933,7 +929,6 @@ static void mali_dvfs_work_handler(struct work_struct *w)
 	    if (step4_clk != mali_dvfs[4].clock) {
                 MALI_PRINT(("::: step4_clk change to %d Mhz\n", step4_clk));
                 mali_dvfs[4].clock = step4_clk;
-		gpu_voltage_delta_reset(4);
 		needs_update=1;
 	    }
         }
