@@ -34,7 +34,7 @@ typedef struct mali_dvfs_tableTag{
 extern mali_dvfs_table mali_dvfs[MALI_STEPS];
 
 static ssize_t gpu_clock_show(struct device *dev, struct device_attribute *attr, char *buf) {
-        return sprintf(buf, "Step0: %d\nStep1: %d\nStep2: %d\nStep3: %d\nStep4: %d\n"
+        return sprintf(buf, "Step1 %d\nStep2 %d\nStep3 %d\nStep4 %d\nStep5 %d\n"
                                                 "Threshold0-1/up-down: %d%% %d%%\n"
                                                 "Threshold1-2/up-down: %d%% %d%%\n"
                                                 "Threshold2-3/up-down: %d%% %d%%\n"
