@@ -38,7 +38,11 @@ unsigned int gv[MALI_STEPS];
 
 static ssize_t gpu_voltage_show(struct device *dev, struct device_attribute *attr, char *buf) {
         return sprintf(buf, "Step1 %d\nStep2 %d\nStep3 %d\nStep4 %d\nStep5 %d\n",
-                       mali_dvfs[0].vol, mali_dvfs[1].vol,mali_dvfs[2].vol, mali_dvfs[3].vol, mali_dvfs[4].vol);
+				mali_dvfs[0].vol/1000, 
+				mali_dvfs[1].vol/1000,
+				mali_dvfs[2].vol/1000,
+				mali_dvfs[3].vol/1000, 
+				mali_dvfs[4].vol/1000);
 }
 
 static ssize_t gpu_voltage_store(struct device *dev, struct device_attribute *attr, const char *buf,
