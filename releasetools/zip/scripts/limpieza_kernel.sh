@@ -1,9 +1,16 @@
 #!/sbin/sh
-# ====================================
-# Script de limpieza para MoRoROM v3.0
-# ====================================
+# ==================================
+# Script de limpieza para MoRoKernel
+# ==================================
 
-# Kernel
+# Limpieza MoRoKernel
+rm -Rf /data/.mtweaks/bk
+rm /data/.mtweaks/battery.profile
+rm /data/.mtweaks/performance.profile
+rm /data/.mtweaks/default.profile
+rm /data/.mtweaks/.active.profile
+
+# Otros Kernels
 rm /data/app/de.andip71.boeffla_config_v2-*.apk
 rm /data/app/com.arter97.aswitch-*.apk
 rm /data/app/com.arter97.atweaks-*.apk
@@ -31,11 +38,9 @@ rm -rf /data/.boeffla
 rm -rf /data/.tpowercc
 rm -rf /data/.arter97
 rm -rf /data/.siyah
+rm -rf /data/.moro
 rm -rf /data/media/.arter97
 rm -rf /data/media/0/.arter97
-
-rm -rf /system/etc/init.d
-mkdir /system/etc/init.d
 
 rm -rf /data/media/kernel
 rm -rf /data/media/0/kernel

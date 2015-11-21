@@ -16,8 +16,6 @@ ui_print("");
 ui_print("Borrando dalvi & cache");
 delete_recursive("/data/dalvik-cache");
 delete_recursive("/data/cache");
-delete_recursive("/data/.moro");
-delete_recursive("/data/data/com.otaupdater");
 ui_print("");
 ui_print("");
 
@@ -29,12 +27,13 @@ ui_print("");
 ui_print("");
 
 ui_print("Instalando MTWeaks");
-package_extract_dir("app", "/system/app");
-set_perm(0, 0, 0644, "/system/app/MTweaks.apk");
+package_extract_file("app/MTweaks.apk", "/data/app/com.morogoku.mtweaks.app-1.apk");
+set_perm(0, 0, 0644, "/data/app/com.morogoku.mtweaks.app-1.apk");
 ui_print("");
 ui_print("");
 
 ui_print("Soporte OTA Updater");
+delete_recursive("/data/data/com.otaupdater");
 package_extract_dir("ota", "/system");
 set_perm(0, 0, 0644, "/system/kernel.ota.prop");
 set_perm(0, 0, 0644, "/system/ota.prop");
