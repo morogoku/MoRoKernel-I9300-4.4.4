@@ -1,0 +1,57 @@
+#!/sbin/busybox sh
+
+
+if [ "a$2" != "a" ];then
+
+	filename=$(basename $2)
+
+	if [ "a$3" == "a" ];then
+		evalcmd='eval "echo \$$filename"'
+		eval $evalcmd
+	else
+		evalcmd='eval "$filename=$3"'
+		eval $evalcmd
+		evalcmd='eval "echo \$$filename"'
+		eval $evalcmd
+
+		write_values(){
+
+			while read FREQ VOLT; do
+				MIF_VOLT=`expr $VOLT $uv`
+
+				echo $FREQ $MIF_VOLT > /sys/devices/system/cpu/busfreq/mif_volt_table
+				
+			done < $PROFILE_PATH/bk/bk_orig_mif_voltage
+
+		}
+
+		case "$mifvolt_profile" in
+		  0)
+		    # 0mV (Stock)
+		    uv=""
+		    write_values
+		    ;;
+		  -25)
+		    # -25mV
+		    uv="- 25000"
+		    write_values
+		    ;;
+		  -50)
+		    # -50mV
+		    uv="- 50000"
+		    write_values
+		    ;;
+		  -75)
+		    # -75mV
+		    uv="- 75000"
+		    write_values
+		    ;;
+		  -100)
+		    # -100mV
+		    uv="- 100000"
+		    write_values
+		    ;;
+		esac;
+
+	fi
+fi

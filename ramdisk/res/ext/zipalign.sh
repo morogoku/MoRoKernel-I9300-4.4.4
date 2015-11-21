@@ -5,8 +5,9 @@
 
 BB=/sbin/busybox
 
-LOG_FILE=/data/.moro/zipalign.log;
-ZIPALIGNDB=/data/.moro/zipalign.db;
+PROFILE_PATH=/data/.mtweaks
+LOG_FILE=$PROFILE_PATH/zipalign.log;
+ZIPALIGNDB=$PROFILE_PATH/zipalign.db;
 
 if [ -e $LOG_FILE ]; then
 	rm $LOG_FILE;

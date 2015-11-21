@@ -1,0 +1,68 @@
+#!/sbin/busybox sh
+
+
+if [ "a$2" != "a" ];then
+
+	filename=$(basename $2)
+
+	if [ "a$3" == "a" ];then
+		evalcmd='eval "echo \$$filename"'
+		eval $evalcmd
+	else
+		evalcmd='eval "$filename=$3"'
+		eval $evalcmd
+		evalcmd='eval "echo \$$filename"'
+		eval $evalcmd
+
+		write_values(){
+
+			while read FREQ UVOLT; do
+				cmd=`expr $UVOLT $uv_gpu`
+				gvolt="$gvolt $cmd"
+			done < $PROFILE_PATH/bk/bk_orig_gpu_voltage
+
+			echo $gvolt > /sys/devices/virtual/misc/gpu_voltage_control/gpu_control
+
+
+		}
+
+		case "$gpuvolt_profile" in
+		  0)
+		    # 0mV (Stock)
+		    uv_gpu=""
+		    write_values
+		    ;;
+		-25)
+		    # -25mV
+		    uv_gpu="- 25000"
+		    write_values
+		    ;;
+		-50)
+		    # -50mV
+		    uv_gpu="- 50000"
+		    write_values
+		    ;;
+		-75)
+		    # -75mV
+		    uv_gpu="- 75000"
+		    write_values
+		    ;;
+		-100)
+		    # -100mV
+		    uv_gpu="- 100000"
+		    write_values
+		    ;;
+		+25)
+		    # +25mV
+		    uv_gpu="+ 25000"
+		    write_values
+		    ;;
+		+50)
+		    # +50mV
+		    uv_gpu="+ 50000"
+		    write_values
+		    ;;
+		esac;
+
+	fi
+fi

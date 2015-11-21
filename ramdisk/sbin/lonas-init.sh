@@ -4,17 +4,18 @@
 #
 
 BB=/sbin/busybox
+PROFILE_PATH=/data/.mtweaks
 
 # Inicio
 $BB mount -o remount,rw -t auto /system
 $BB mount -o remount,rw -t auto /data
 $BB mount -t rootfs -o remount,rw rootfs
 
-# Crear carpeta /data/.moro si no existe
-if [ ! -d /data/.moro ] ; then
-	$BB mkdir /data/.moro
-	$BB chmod 0777 /data/.moro
-	$BB chown 0.0 /data/.moro
+# Crear carpeta MTWEAKS si no existe
+if [ ! -d $PROFILE_PATH ] ; then
+	$BB mkdir $PROFILE_PATH
+	$BB chmod 0777 $PROFILE_PATH
+	$BB chown 0.0 $PROFILE_PATH
 fi
 
 # Detectar y generar INIT.D

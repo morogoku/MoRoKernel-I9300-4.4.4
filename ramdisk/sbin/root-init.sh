@@ -28,7 +28,7 @@ if [ ! -f /system/xbin/su ] && [ ! -f /system/bin/su ]; then
 $BB mkdir /system/bin/.ext
 $BB cp /res/misc/su /system/xbin/su
 $BB cp /res/misc/su /system/xbin/daemonsu
-$BB cp /system/lib/libsupol.so /system/lib/libsupol.so
+$BB cp /res/misc/libsupol.so /system/lib/libsupol.so
 $BB cp /res/misc/su /system/bin/.ext/.su
 $BB cp /res/misc/install-recovery.sh /system/etc/install-recovery.sh
 $BB cp /res/misc/99SuperSUDaemon /system/etc/init.d/99SuperSUDaemon

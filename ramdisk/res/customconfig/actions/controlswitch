@@ -6,7 +6,6 @@ if [ -z $3 ]; then
 	evalcmd='eval echo \$$SWITCH'
 	if [ "a`eval $evalcmd`" == "a" ]; then
 		eval $SWITCH=off
-		echo $SWITCH=off >> $DEFAULT_PROFILE
 	fi
 else
 	case "$3" in

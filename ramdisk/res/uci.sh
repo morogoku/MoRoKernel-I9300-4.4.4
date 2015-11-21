@@ -5,7 +5,6 @@
 # You probably won't need to modify this file
 # You'll need to modify the files in /res/customconfig directory
 
-ACTION_SCRIPTS=/res/customconfig/actions
 source /res/customconfig/customconfig-helper
 
 # first, read defaults
@@ -25,6 +24,10 @@ case "${1}" in
     ;;
   select)
     select_profile "$2"
+    exit 0
+    ;;
+  dump)
+    dump_profile "$2"
     exit 0
     ;;
   config)

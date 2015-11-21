@@ -1,0 +1,30 @@
+#!/sbin/busybox sh
+
+STEP=GPU_VOLT_`echo $2`
+
+if [ -z $3 ]; then
+	evalcmd='eval echo \$$STEP'
+	if [ "a`eval $evalcmd`" == "a" ]; then
+		while read FREQ VOLT; do
+			S_VOLT=`expr $VOLT / 1000`
+			eval "GPU_VOLT_$FREQ=$S_VOLT"
+		done < /sys/devices/virtual/misc/gpu_voltage_control/gpu_control
+	fi
+else
+	eval $STEP=$3
+
+	VOLTAGES=""
+	while read FREQ UVOLT; do
+		evalcmd='eval echo \$GPU_VOLT_$FREQ'
+		evalcmd=`eval $evalcmd`
+		evalcmd=`expr $evalcmd \* 1000`
+		VOLTAGES="$VOLTAGES $evalcmd"
+	done < /sys/devices/virtual/misc/gpu_voltage_control/gpu_control
+
+	echo $VOLTAGES > /sys/devices/virtual/misc/gpu_voltage_control/gpu_control
+
+fi
+
+eval echo \$$STEP
+
+

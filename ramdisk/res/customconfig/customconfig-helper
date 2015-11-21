@@ -1,65 +1,52 @@
 #!/sbin/busybox sh
-#
 # custom script helper by Gokhan Moral
-# Customized by Andrei F.
-#
+# modified by MoroGoku
 
-REVISION=`cat /res/customconfig/config.revision`
-
-PROFILE_PATH=/data/.moro
-REVISION_PATH=$PROFILE_PATH/config.version
-INIT_PROFILE=/res/customconfig/init.profile
-DEFAULT_PROFILE=$PROFILE_PATH/init.profile
-OVERRIDE_PROFILE_DATA=$PROFILE_PATH/override.profile
-OVERRIDE_PROFILE_RFS=/res/customconfig/override.profile
-INJECTION_PROFILE=/res/customconfig/injection.profile
-CONFIG_XML=$PROFILE_PATH/customconfig.xml
-ACTION_CACHE=$PROFILE_PATH/action.cache
+DEFAULT_PROFILE=/res/customconfig/default.profile
+BATTERY_PROFILE=/res/customconfig/battery.profile
+PERFORMANCE_PROFILE=/res/customconfig/performance.profile
+CONFIG_XML=/res/customconfig/customconfig.xml
+PROFILE_PATH=/data/.mtweaks
 TEMP_CONFIG=$PROFILE_PATH/.config.tmp
 LAST_SELECTED=.active.profile
 ACTIVE_PROFILE=${PROFILE_PATH}/${LAST_SELECTED}
+ACTION_SCRIPTS=/res/customconfig/actions
 
-read_dom () {
-	local IFS=\>
-	read -r ENTITY CONTENT
-}
 
 apply_config()
 {
-	make_cache
-	
-	CONFIG_BOOTED=false
-
-	while read action param; do
-		actionval=`source /res/customconfig/actions/$action $action $param`
-		read_defaults
-		read_config
-		CONFIG_BOOTED=false
-		echo applying: /$action $action $param $actionval
-		source /res/customconfig/actions/$action $action $param $actionval
-	done < $ACTION_CACHE
-
-	CONFIG_BOOTED=true
-}
-
-make_cache()
-{
-	if [ ! -f $ACTION_CACHE ]; then
-		touch $ACTION_CACHE
-		chmod 777 $ACTION_CACHE
-		
-		while read_dom; do
-			action=$(echo $ENTITY |  grep -v \<button | sed -e 's/action=/\naction=/g' | grep action | awk -F'"' '{print $2}')
-			if [ "a$action" != a ]; then
-				echo $action >> $ACTION_CACHE
-			fi
-		done < $CONFIG_XML
-	fi
+actions=`print_config | \
+    sed -e 's/\n/ /g' -e 's/>/\n/g' -e '/<button/d' \
+        -e 's/action=/\naction=/g' | \
+    grep action | awk -F'"' '{print $2 }'`
+OLDIFS=$IFS
+IFS=$'\n'
+for i in $actions;do
+  IFS=$OLDIFS
+  action=`echo $i | awk '{print $1}'`
+  actionparam=`echo $i | awk '{print $2,$3,$4,$5}'`
+  if [ "a$action" != a ];then
+    . $ACTION_SCRIPTS/$action $action $actionparam
+    actionval=`. $ACTION_SCRIPTS/$action $action $actionparam`
+    echo applying: /res/uci.sh $action $actionparam $actionval
+    . $ACTION_SCRIPTS/$action $action $actionparam $actionval
+  fi
+done
 }
 
 print_config()
 {
   cat $CONFIG_XML
+}
+
+dump_profile()
+{
+  if [ "a$1" == "a" ];
+  then
+    cat $PROFILE_PATH/`cat $ACTIVE_PROFILE`.profile
+  else
+    cat $PROFILE_PATH/$1.profile
+  fi
 }
 
 list_profile()
@@ -105,6 +92,74 @@ rename_profile()
   fi
 }
 
+#################################################################################
+#    Apply changes of custom profiles, to active profile, for write_config()    #
+#################################################################################
+
+cpuvolt_custom()
+{
+	while read FREQ UVOLT; do
+		sed -i "s/CPU_VOLT_$FREQ=[^ ]*/CPU_VOLT_$FREQ=$UVOLT/" $PROFILE_PATH/`cat $ACTIVE_PROFILE`.profile
+	done < /sys/devices/system/cpu/cpu0/cpufreq/UV_mV_table
+}
+
+gpuvolt_custom()
+{
+	while read GFREQ VOLT; do
+		G_VOLT=`expr $VOLT / 1000`
+		sed -i "s/GPU_VOLT_$GFREQ=[^ ]*/GPU_VOLT_$GFREQ=$G_VOLT/" $PROFILE_PATH/`cat $ACTIVE_PROFILE`.profile
+	done < /sys/devices/virtual/misc/gpu_voltage_control/gpu_control
+}
+
+gpufreq_custom()
+{
+	n=1
+	for FREQ in `cat /sys/devices/virtual/misc/gpu_clock_control/gpu_control | grep Step | awk '{ print $2 }'`; do
+		stepn="GPU_FREQ"$n
+		sed -i "s/$stepn=[^ ]*/$stepn=$FREQ/" $PROFILE_PATH/`cat $ACTIVE_PROFILE`.profile
+		n=`expr $n + 1`
+	done
+}
+
+intvolt_custom()
+{
+	while read FREQ VOLT; do
+		INT_FREQ=`echo $FREQ | cut -c 4-`
+		INT_VOLT=`expr $VOLT / 1000`
+		sed -i "s/BUS_INT_VOLT_$INT_FREQ=[^ ]*/BUS_INT_VOLT_$INT_FREQ=$INT_VOLT/" $PROFILE_PATH/`cat $ACTIVE_PROFILE`.profile
+	done < /sys/devices/system/cpu/busfreq/int_volt_table
+}
+
+mifvolt_custom()
+{
+	while read FREQ VOLT; do
+		MIF_FREQ=`echo $FREQ | cut -c 1-3`
+		MIF_VOLT=`expr $VOLT / 1000`
+		sed -i "s/BUS_MIF_VOLT_$MIF_FREQ=[^ ]*/BUS_MIF_VOLT_$MIF_FREQ=$MIF_VOLT/" $PROFILE_PATH/`cat $ACTIVE_PROFILE`.profile
+	done < /sys/devices/system/cpu/busfreq/mif_volt_table
+}
+
+eq_custom()
+{
+	n=1
+	for EQ in `cat /sys/class/misc/rem_sound/eq_gains | awk -F ' ' '{ print $3,$4,$5,$6,$7 }'`; do
+		eqn="eq"$n
+		sed -i "s/$eqn=[^ ]*/$eqn=$EQ/" $PROFILE_PATH/`cat $ACTIVE_PROFILE`.profile
+		n=`expr $n + 1`
+	done
+}
+
+lmk_custom()
+{
+	n=1
+	for LMK in `cat /sys/module/lowmemorykiller/parameters/minfree | awk -F ',' '{ print $1,$2,$3,$4,$5,$6 }'`; do
+		lmkn="lmk"$n
+		num=`expr $LMK / 256`
+		sed -i "s/$lmkn=[^ ]*/$lmkn=$num/" $PROFILE_PATH/`cat $ACTIVE_PROFILE`.profile
+		n=`expr $n + 1`
+	done
+}
+
 write_config()
 {
   if [ "a$1" == "a" ];then
@@ -124,7 +179,17 @@ write_config()
   cp $TEMP_CONFIG $_CONFIG_FILE
   chmod 777 $_CONFIG_FILE
   rm -f $TEMP_CONFIG
+
+  cpuvolt_custom
+  gpuvolt_custom
+  gpufreq_custom
+  intvolt_custom
+  mifvolt_custom
+  eq_custom
+  lmk_custom
 }
+
+
 
 read_config()
 {
@@ -147,72 +212,24 @@ read_defaults ()
 {
   read_config "$DEFAULT_PROFILE"
   _ACTIVE_PROFILE=`cat $ACTIVE_PROFILE`
+
+
 }
 
 # some initialization code
-
-if [ ! -d $PROFILE_PATH ]; then
-	mkdir $PROFILE_PATH
-	chmod 777 $PROFILE_PATH
+if [ ! -f $CONFIG_XML ]; then
+  mount -o remount,rw /
+  . /res/customconfig/customconfig.xml.generate > $CONFIG_XML
+  mount -o remount,ro /
 fi
 
-CLEAN=false
-
-if [ ! -f $REVISION_PATH ]; then
-	echo $REVISION > $REVISION_PATH
-	CLEAN=true
+if [ ! -f $PROFILE_PATH/$LAST_SELECTED ];then 
+  echo default > $PROFILE_PATH/$LAST_SELECTED
+  chmod 777 $PROFILE_PATH/$LAST_SELECTED
 fi
 
-if [ ! -f $DEFAULT_PROFILE ]; then
-	cp $INIT_PROFILE $DEFAULT_PROFILE
-	echo CONFIG_BOOTED=true >> $DEFAULT_PROFILE
-	chmod 777 $DEFAULT_PROFILE
+if [ ! -f $PROFILE_PATH/default.profile ];then
+  cp $DEFAULT_PROFILE $PROFILE_PATH/default.profile
+  chmod 777 $PROFILE_PATH/default.profile
 fi
 
-if [ ! -f $PROFILE_PATH/$LAST_SELECTED -o "$REVISION" != "`cat $REVISION_PATH`" ]; then 
-	echo default > $PROFILE_PATH/$LAST_SELECTED
-	chmod 777 $PROFILE_PATH/$LAST_SELECTED
-fi
-
-if [ ! -f $PROFILE_PATH/default.profile ]; then
-	cp $DEFAULT_PROFILE $PROFILE_PATH/default.profile
-	chmod 777 $PROFILE_PATH/default.profile
-fi
-
-if [ ! -f $CONFIG_XML -o "$REVISION" != "`cat $REVISION_PATH`" ]; then
-	source /res/customconfig/customconfig.xml.generate > $CONFIG_XML
-fi
-
-if [ -f $ACTION_CACHE -a "$REVISION" != "`cat $REVISION_PATH`" ]; then
-	rm $ACTION_CACHE
-	make_cache
-fi
-
-if [ "$REVISION" -gt "`cat $REVISION_PATH`" -a $CLEAN != true ]; then
-	cat $INJECTION_PROFILE >> $DEFAULT_PROFILE
-fi
-
-if [ -f $OVERRIDE_PROFILE_DATA -o "$REVISION" != "`cat $REVISION_PATH`" ]; then
-	read_defaults
-	if [ "$REVISION" != "`cat $REVISION_PATH`" ]; then
-		read_config $OVERRIDE_PROFILE_RFS
-	fi
-
-	write_config init
-	read_config
-
-	if [ "$REVISION" != "`cat $REVISION_PATH`" ]; then
-		read_config $OVERRIDE_PROFILE_RFS
-	fi
-
-	if [ -f $OVERRIDE_PROFILE_DATA ]; then
-		read_config $OVERRIDE_PROFILE_DATA
-	fi
-
-	write_config
-
-	rm $OVERRIDE_PROFILE_DATA
-	echo $REVISION > $REVISION_PATH
-	/res/uci.sh $1 $2 $3 $4 $5 $6
-	exit 0
-fi

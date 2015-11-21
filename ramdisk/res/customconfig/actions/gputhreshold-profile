@@ -1,0 +1,81 @@
+#!/sbin/busybox sh
+
+
+if [ "a$2" != "a" ];then
+
+	filename=$(basename $2)
+
+	if [ "a$3" == "a" ];then
+		evalcmd='eval "echo \$$filename"'
+		eval $evalcmd
+	else
+		evalcmd='eval "$filename=$3"'
+		eval $evalcmd
+		evalcmd='eval "echo \$$filename"'
+		eval $evalcmd
+
+		write_values()
+		{
+			echo $gputhreshold_values > /sys/class/misc/gpu_clock_control/gpu_control
+		}
+
+		case "$gputhreshold_profile" in
+
+		  0)
+		    # ExtraBattsave (Máximo Ahorro de Batería)
+		    # Threshold0-1/up-down: 70% 62%
+		    # Threshold1-2/up-down: 90% 85%
+		    # Threshold2-3/up-down: 90% 85%
+		    # Threshold3-4/up-down: 90% 85%
+		    gputhreshold_values="70% 62% 90% 85% 90% 85% 90% 85%"
+		    write_values
+		    ;;
+		  1)
+		    # Moderado (Javilonas)
+		    # Threshold0-1/up-down: 62% 54%
+		    # Threshold1-2/up-down: 82% 77%
+		    # Threshold2-3/up-down: 82% 77%
+		    # Threshold3-4/up-down: 82% 77%
+		    gputhreshold_values="62% 54% 82% 77% 82% 77% 82% 77%"
+		    write_values
+		    ;;
+		  2)
+		    # Battsave (Ahorrar Batería)
+		    # Threshold0-1/up-down: 50% 42%
+		    # Threshold1-2/up-down: 70% 65%
+		    # Threshold2-3/up-down: 70% 65%
+		    # Threshold3-4/up-down: 70% 65%
+		    gputhreshold_values="50% 42% 70% 65% 70% 65% 70% 65%"
+		    write_values
+		    ;;
+		  3)
+		    # Normal (STOCK)
+		    # Threshold0-1/up-down: 40% 32%
+		    # Threshold1-2/up-down: 60% 55%
+		    # Threshold2-3/up-down: 60% 55%
+		    # Threshold3-4/up-down: 60% 55%
+		    gputhreshold_values="40% 32% 60% 55% 60% 55% 60% 55%"
+		    write_values
+		    ;;
+		  4)
+		    # Semi-Performance (Javilonas) (Para Jugones no exigentes)
+		    # Threshold0-1/up-down: 35% 27%
+		    # Threshold1-2/up-down: 55% 50%
+		    # Threshold2-3/up-down: 55% 50%
+		    # Threshold3-4/up-down: 55% 50%
+		    gputhreshold_values="35% 27% 55% 50% 55% 50% 55% 50%"
+		    write_values
+		    ;;
+		  5)
+		    # Performance (Expecial Gamers insatisfechos)
+		    # Threshold0-1/up-down: 30% 22%
+		    # Threshold1-2/up-down: 50% 45%
+		    # Threshold2-3/up-down: 50% 45%
+		    # Threshold3-4/up-down: 50% 45%
+		    gputhreshold_values="30% 22% 50% 45% 50% 45% 50% 45%"
+		    write_values
+		    ;;
+		esac;
+
+	fi
+fi

@@ -1,0 +1,53 @@
+#!/sbin/busybox sh
+
+
+if [ "a$2" != "a" ];then
+
+	filename=$(basename $2)
+
+	if [ "a$3" == "a" ];then
+		evalcmd='eval "echo \$$filename"'
+		eval $evalcmd
+	else
+		evalcmd='eval "$filename=$3"'
+		eval $evalcmd
+		evalcmd='eval "echo \$$filename"'
+		eval $evalcmd
+
+		write_values()
+		{
+			echo $gpufreq_values > /sys/devices/virtual/misc/gpu_clock_control/gpu_control
+		}
+
+		case "$gpufreq_profile" in
+
+		  0)
+		    # 160/266/350/440/533 (default)
+		    gpufreq_values="160 266 350 440 533"
+		    write_values
+		    ;;
+		  1)
+		    # 160/266/350/400/440
+		    gpufreq_values="160 266 350 400 440"
+		    write_values
+		    ;;
+		  2)
+		    # 266/350/440/533/640
+		    gpufreq_values="266 350 440 533 640"
+		    write_values
+		    ;;
+		  3)
+		    # 350/440/533/640/666
+		    gpufreq_values="350 440 533 640 666"
+		    write_values
+		    ;;
+		  4)
+		    # 440/533/600/640/700
+		    gpufreq_values="440 533 600 640 700"
+		    write_values
+		    ;;
+
+		esac;
+
+	fi
+fi

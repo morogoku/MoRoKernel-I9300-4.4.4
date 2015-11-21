@@ -7,7 +7,6 @@ if [ -f $3 ];then
 		evalcmd='eval echo \$$FILEVAR'
 		if [ "a`eval $evalcmd`" == "a" ]; then
 			eval $FILEVAR=`cat $3`
-			echo $FILEVAR=`cat $3` >> $DEFAULT_PROFILE
 		fi
 	else
 		echo $4 > $3

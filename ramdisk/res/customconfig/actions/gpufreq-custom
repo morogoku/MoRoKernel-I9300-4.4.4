@@ -1,0 +1,13 @@
+#!/sbin/busybox sh
+
+if [ "a$3" == "a" ];then
+	evalcmd='eval "echo \$GPU_FREQ$2"'
+  	eval $evalcmd
+else
+  	evalcmd='eval "GPU_FREQ$2=$3"'
+  	eval $evalcmd
+  	evalcmd='eval "echo \$GPU_FREQ$2"'
+  	eval $evalcmd
+    
+	echo "$GPU_FREQ1 $GPU_FREQ2 $GPU_FREQ3 $GPU_FREQ4 $GPU_FREQ5" > /sys/class/misc/gpu_clock_control/gpu_control
+fi

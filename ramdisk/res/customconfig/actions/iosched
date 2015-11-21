@@ -8,7 +8,6 @@ if [ -z $4 ]; then
 		sleep 2
 		VAL=`cat $3 | sed -n -e '/\[[^]]/s/^[^[]*\[\([^]]*\)].*$/\1/p'`
 		eval $FILEVAR=$VAL
-		echo $FILEVAR=$VAL >> $DEFAULT_PROFILE
 	fi
 else
 	if [ -f $3 ];then

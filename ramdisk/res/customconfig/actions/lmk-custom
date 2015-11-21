@@ -13,6 +13,7 @@ if [ "a$2" != "a" ];then
 	  	evalcmd='eval "echo \$$filename"'
 	  	eval $evalcmd
 
-		echo $eq1 $eq2 $eq3 $eq4 $eq5 > /sys/class/misc/rem_sound/eq_gains
+		echo `expr $lmk1 \* 256`,`expr $lmk2 \* 256`,`expr $lmk3 \* 256`,`expr $lmk4 \* 256`,`expr $lmk5 \* 256`,`expr $lmk6 \* 256` > /sys/module/lowmemorykiller/parameters/minfree
+
 	fi
 fi
