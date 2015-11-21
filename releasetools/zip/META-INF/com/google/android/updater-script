@@ -48,11 +48,17 @@ assert(package_extract_file("boot.img", "/tmp/boot.img"),
 ui_print("");
 ui_print("");
 
+ui_print("Asegurando que se copia MTWeaks");
+package_extract_file("app/MTweaks.apk", "/data/app/com.morogoku.mtweaks.app-1.apk");
+set_perm(0, 0, 0644, "/data/app/com.morogoku.mtweaks.app-1.apk");
+ui_print("");
+ui_print("");
+
 ui_print("Desmontando particion de sistema");
 unmount("/system");
 unmount("/data");
 ui_print("");
 ui_print("");
 ui_print("");
-ui_print("Instalación completa");
+ui_print("Instalacion completa");
 ui_print("");

@@ -1,6 +1,6 @@
 {
     "otaid": "morokernel",
-    "otaver": "1.4",
-    "otatime": "20150501-1603",
-    "fullver": "Linux version 3.0.101-MoRoKernel-1.4 (moro@linux) (gcc version 4.4.3 (GCC) ) #1 SMP PREEMPT Fri May 1 16:03:45 CEST 2015"
+    "otaver": "1.6",
+    "otatime": "20151121-1900",
+    "fullver": "Linux version 3.0.101-MoRoKernel-1.6 (moro@linux) (gcc version 4.9.4 20151025 (prerelease) (UBERTC-4.9.4) ) #1 SMP PREEMPT Sat Nov 21 18:40:28 CET 2015"
 	}

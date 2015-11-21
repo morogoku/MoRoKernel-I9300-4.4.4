@@ -23,6 +23,8 @@ rm /system/app/aSwitch.apk
 rm /system/app/aTweaks.apk
 rm /system/app/XTweaks.apk
 rm /system/app/MTweaks.apk
+rm /data/app/MTweaks.apk
+rm /system/priv-app/MTweaks.apk
 
 rm /system/kernel.ota.prop
 

@@ -141,7 +141,7 @@ echo '
 echo "
       			<seekBar  
 				name=\"${FREQ} MHz step\"
-				description=\"Voltage por defecto: $UVOLT mV\" 
+				description=\"Voltaje por defecto: $UVOLT mV\" 
 	         		action=\"cpuvolt-custom ${FREQ}\"
                 		unit=\"mV\" min=\"`expr $UVOLT \- 500`\" reversed=\"false\" step=\"25\" max=\"1500\"/>
 " >> $XML
@@ -179,7 +179,7 @@ echo '
     		</settingsPane>
 
 		<settingsPane
-			name="GPU voltage control"
+			name="Voltaje GPU"
 			description="La disminución de tensión reducirá el consumo de energía de la GPU. El aumento en las frecuencias de overclocking mejora la estabilidad. Demasiado bajo voltaje puede causar inestabilidad y puede quedarse congelado (Colgado).">
 
 			<spinner 
@@ -201,7 +201,7 @@ echo '
 echo "
       			<seekBar
 				name=\"GPU Volt ${FREQ}\"
-				description=\"Voltage por defecto: ${S_VOLT} mV\" 
+				description=\"Voltaje por defecto: ${S_VOLT} mV\" 
             			action=\"gpuvolt-custom ${FREQ}\"
                 		unit=\"mV\" min=\"775\" reversed=\"false\" step=\"25\" max=\"1300\"/>
 " >> $XML
@@ -355,7 +355,7 @@ echo '
 
 	</settingsTab>
 
-	<settingsTab name="Bus">
+	<settingsTab name="BUS">
     
 		<settingsPane
 			name="¡¡ ATENCION !!"
@@ -364,7 +364,7 @@ echo '
 		</settingsPane>
 
     		<settingsPane
-			name="Internal voltage"
+			name="Voltaje Interno BUS"
 			description="Modifica los Voltajes Internos del BUS">
 
 			<spinner 
@@ -388,7 +388,7 @@ echo '
 echo "
 			<seekBar
 				name=\"${S_FREQ} MHz step\"
-				description=\"Default voltage: ${S_VOLT}mV\"
+				description=\"Voltaje por defecto: ${S_VOLT}mV\"
 				action=\"intvolt-custom ${S_FREQ}\"
                   		unit=\"mV\" min=\"600\" reversed=\"false\" step=\"25\" max=\"1150\"/>
 " >> $XML
@@ -399,7 +399,7 @@ echo  '
 		</settingsPane>
     
 		<settingsPane
-			name="Memory voltage"
+			name="Voltaje Memoria BUS"
 			description="Modifica los Voltajes de la Memoria del BUS">
 
 			<spinner 
@@ -423,7 +423,7 @@ echo  '
 echo "
 			<seekBar
 				name=\"${S_FREQ} MHz step\"
-				description=\"Default voltage: ${S_VOLT}mV\" 
+				description=\"Voltaje por defecto: ${S_VOLT}mV\" 
 				action=\"mifvolt-custom ${S_FREQ}\"
                   		unit=\"mV\" min=\"750\" reversed=\"false\" step=\"25\" max=\"1100\"/>
 " >> $XML
