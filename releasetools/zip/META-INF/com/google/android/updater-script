@@ -1,5 +1,5 @@
 ui_print("*******************************");
-ui_print("*      MoRoKernel v1.6        *");
+ui_print("*      MoRoKernel v1.7        *");
 ui_print("*                             *");
 ui_print("*     I9300 port 4.4.4        *");
 ui_print("*******************************");
