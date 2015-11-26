@@ -49,8 +49,8 @@ BUS_MIF_VOLT_160=
 BUS_MIF_VOLT_267=
 BUS_MIF_VOLT_400=
 
-internal_iosched=bfq
-sd_iosched=bfq
+internal_iosched=cfq
+sd_iosched=cfq
 internal_read_ahead_kb=256
 sd_read_ahead_kb=512
 tcp_congestion_control=westwood
